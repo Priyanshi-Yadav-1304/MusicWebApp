@@ -1,0 +1,45 @@
+.analytics-page{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    padding: 2vmin;
+}
+.analytics-card{
+    height: 30vmin;
+    width: 40vmin;
+    background-color: #fff;
+    border: 1px solid grey;
+    border-radius: 2vmin;
+    padding: 0;
+}
+.analytics-image{
+    height: 15vmin;
+    width: 15vmin;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 0vmin;
+    border-radius:2vmin;
+}
+.lower-card-analytics{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 30%;
+    width: 100%;
+    border-top: 1px solid grey;
+}
+.upper-card-analytics{
+    height: 70%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.lower-card-analytics-image{
+    height: 6vmin;
+    width: 6vmin;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
