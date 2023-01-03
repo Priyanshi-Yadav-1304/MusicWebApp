@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link ,useNavigate } from 'react-router-dom';
 import './Css/Signup.css'
 
 function Signin() {
@@ -10,13 +10,16 @@ function Signin() {
   const signInAPI =  async (e) =>{
     e.preventDefault();
     try{
-       await axios.post('http://localhost:4000/user/signIn',{
+      const {data} = await axios.post('http://localhost:4000/user/signIn',{
         email,password
       });
-      navigate('/profile')
+      let {user} = data;
+      localStorage.setItem('user-id',user._id)
+      navigate(`/profile`)
     }catch(err){
+      const {message} = err.response.data;
       console.log({err})
-      alert('wrong username or password')
+      alert(message)
     }
   }
   return (

@@ -12,6 +12,11 @@ const songModel = new mongoose.Schema({
     artistName:String,
     songTitle:String,
     instaId:String,
+    user_id:String,
+    clicked:{
+        type:Number,
+        default:0
+    }
 })
 const song = mongoose.model("song",songModel);
 module.exports =  song;

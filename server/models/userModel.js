@@ -9,7 +9,8 @@ const userModel = new mongoose.Schema({
     instaId:String,
     image:{},
     about:String,
-    profession:String
+    profession:String,
+    onBoardingTime:Date,
 },{timestamps:true})
 const user = mongoose.model("user",userModel);
 module.exports = user;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Css/InputPage.css";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -20,7 +20,6 @@ import axios from "axios";
 function InputImage() {
   const [file, setFile] = useState(image);
   const [loader, setLoader] = useState(false);
-  const [artistName, setArtistName] = useState('');
   const [songTitle, setSongTitle] = useState('');
   const [instagramId, setInstagramId] = useState('');
   const navigate = useNavigate();
@@ -33,12 +32,28 @@ function InputImage() {
       setFile(reader.result)
     };
   }
+  useEffect(() => {
+    getUserInstaId();
+  }, []);
+  const getUserInstaId = async() =>{
+    try{
+      setLoader(true);
+      const id = localStorage.getItem('user-id');
+      const {data}  = await axios.get(`http://localhost:4000/user/getUserById/${id}`);
+      const {user} = data;
+      setInstagramId(user?.instaId)
+      setLoader(false);
+    }catch(err){
+      console.log({err});
+      setLoader(false)
+    }
+  }
   const addSongDetails = async() =>{
       try{
         setLoader(true);
         await axios.post(`http://localhost:4000/song/addSongCover/${id}`,{
           image:file,
-          artistName,
+          artistName:'',
           songTitle,
           instaId:instagramId
         });
@@ -76,10 +91,6 @@ function InputImage() {
             <label htmlFor="img">Upload Image</label>
           </CardSection>
           <CardSection>
-            <div className="input-image-input">
-              <Title order={4}>Artist Name</Title>
-              <TextInput value={artistName} onChange={(e) =>setArtistName(e.target.value)} placeholder="Enter artist name" />
-            </div>
             <div className="input-image-input">
               <Title order={4}>Song Title</Title>
               <TextInput value={songTitle} onChange={(e) => setSongTitle(e.target.value)} placeholder="Enter song title" />

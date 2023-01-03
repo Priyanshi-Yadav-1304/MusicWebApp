@@ -13,6 +13,15 @@ const Services = () => {
   const [openUser, setOpenUser] = useState(false);
   const [totalPaidUsers, setTotalPaidUsers] = useState(0);
   const [totalUnPaidUsers, setTotalUnpaidUsers] = useState(0);
+  const [details, setDetails] = useState({
+    signUpTime:'',
+    signUpDate:'',
+    onBoardTime:'',
+    onBoardDate:'',
+    totalLinks:0,
+    totalClicks:0,
+    user_id:''
+  });
   function handleChange(file) {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -84,6 +93,43 @@ const Services = () => {
         setLoader(false)
     }
   }
+  const getUserInfo = async(user_id) =>{
+    try{
+      setLoader(true);
+      const {data} = await axios.post('http://localhost:4000/song/getDetails',{
+        user_id
+      })
+      const {user,totalLinks,totalClicks} = data;
+      let createdAt = new Date(user.createdAt);
+      let onBoardAt = new Date(user.onBoardingTime)
+      let signUpDate = getDate(createdAt);
+      let signUpTime = getTime(createdAt);
+      let onBoardDate = getDate(onBoardAt);
+      let onBoardTime = getTime(onBoardAt);
+      setDetails({signUpTime,signUpDate,onBoardTime,onBoardDate,totalLinks,totalClicks,user_id})
+      setOpenUser(true);
+      setLoader(false);
+    }catch(err){
+      console.log({err})
+      setLoader(false)
+    }
+  }
+  const blockUser = async (user_id)=>{
+      try{
+        const res = await axios.post('/user/blockUser',{
+          user_id
+        })
+        console.log({res})
+      }catch(err){
+        console.log({err});
+      }
+  }
+  const getDate = (createdAt) =>{
+    return createdAt.getDate()+'/'+(createdAt.getMonth()+1)+'/'+createdAt.getFullYear();
+  }
+  const getTime = (createdAt) =>{
+    return createdAt.getHours()+':'+createdAt.getMinutes()+':'+createdAt.getSeconds();
+  }
   return (
     <div className="service-page">
       <Group>
@@ -150,9 +196,9 @@ const Services = () => {
       <Card withBorder className="admin-user-card">
         <Title className="user-analytice-head" order={3}>Non Paid Users</Title>
           {
-            users.map((user)=>{
+            users.map((user,index)=>{
               if(!user.isPaid){
-                return <div className="user-card-detail non">
+                return <div key={index} className="user-card-detail non">
                   <span>Email id : {user.email}</span>
                   <span>Password : {user.password}</span>
                </div>
@@ -165,14 +211,14 @@ const Services = () => {
       <Card withBorder className="admin-user-card">
         <Title className="user-analytice-head" order={3}>Paid Users</Title>
           {
-            users.map((user)=>{
+            users.map((user,index)=>{
               if(user.isPaid){
-                return <div className="user-card-detail paid-users">
+                return <div key={index} className="user-card-detail paid-users">
                   <div>
                       <span>email id : {user.email}</span>
                       <span>Password : {user.password}</span>
                   </div>
-                 <BackgroundImage onClick={()=> setOpenUser(true)} className="paid-users-eye" src={eyeImg}></BackgroundImage>
+                 <BackgroundImage onClick={()=> getUserInfo(user._id)} className="paid-users-eye" src={eyeImg}></BackgroundImage>
                </div>
               }else{
                 return <></>
@@ -182,19 +228,19 @@ const Services = () => {
       </Card>
       <Modal className="eyebox" size={1000} opened={openUser} onClose={() => setOpenUser(false)}>
           
-                 <button className="blockbtn">Block</button>
+                 <button className="blockbtn" onClick={()=> blockUser(details.user_id)}>Block</button>
                  <div className="eyeboxmain">
                     <div className="eyeboxbox">
                       <p className="signupeye">Signup Login</p>
                       <div className="Timeloc">
-                        <h4>Time:-</h4>
+                        <h4>Time:- {details.signUpTime}, {details.signUpDate}</h4>
                         <h4>Location:-</h4>
                       </div>
                     </div>
                     <div className="eyeboxbox">
                         <p className="signupeye">Onboarding Signup</p>
                         <div className="Timeloc">
-                          <h4>Time:-</h4>
+                          <h4>Time:- {details.onBoardTime}, {details.onBoardDate}</h4>
                           <h4>Location:-</h4>
                         </div>
                     </div>
@@ -203,7 +249,7 @@ const Services = () => {
                     <div className="eyeboxbox">
                           <p className="signupeye">Total Links</p>
                             <div className="Timeloc">
-                              <h3>50</h3>
+                              <h3>{details.totalLinks}</h3>
                               <div className="eyeimg">
                               <div></div>
                                <BackgroundImage onClick={()=> setOpenUser(true)} className="paid-users-eye" src={eyeImg}></BackgroundImage>
@@ -213,7 +259,7 @@ const Services = () => {
                     <div className="eyeboxbox">
                           <p className="signupeye">Total Clicks</p>
                           <div className="Timeloc">
-                              <h3>75</h3>
+                              <h3>{details.totalClicks}</h3>
                              <div className="eyeimg">
                               <div></div>
                                <BackgroundImage onClick={()=> setOpenUser(true)} className="paid-users-eye" src={eyeImg}></BackgroundImage>

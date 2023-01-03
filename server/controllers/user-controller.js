@@ -41,7 +41,8 @@ const saveDetails =  async (req,res) =>{
             image:{
                 public_id,
                 secure_url
-            }
+            },
+            onBoardingTime:new Date()
         },{new:true});
         res.status(200).send({message:"profile created",success:true,user})
     }catch(err){
@@ -65,17 +66,20 @@ const signIn = async (req,res) =>{
 
         // const isValidUser =  await brcypt.compare(password,user.password);
         if(user && user.password === password){
+            if(user.isBlocked){
+                res.status(403).send({message:'you are blocked by admin'})
+            }else{
+                const token = await jwt.sign({id:user._id},'qwertyui876543efbgfre345678ytfdxer4567yhbgvfr56');
 
-            const token = await jwt.sign({id:user._id},'qwertyui876543efbgfre345678ytfdxer4567yhbgvfr56');
-
-            res.status(200).cookie('token',token,{
-                httpOnly:true
-            }).send({message:'user signed in successfully',success:true})
+                res.status(200).cookie('token',token,{
+                    httpOnly:true
+                }).send({message:'user signed in successfully',success:true,user})
+            }
         }else{
-            res.status(401).send({message:'wrong email or password',success:false,isValidUser})
+            res.status(401).send({message:'wrong email or password',success:false})
         }
     }catch(err){
-        res.status(400).send({message:err,success:false})
+        res.status(400).send({message:"something went wrong...",err,success:false})
     }
 }
 const updateProfile = async(req,res)=>{
@@ -95,7 +99,7 @@ const updateProfile = async(req,res)=>{
         }else{
             const updatedUser = await user.update({about,profession,instaId});
         }
-        res.status(200).send({message:"successful",success:true,user});
+        res.status(200).send({message:"successful",success:true});
     }catch(err){
         console.log({err})
         res.status(400).send({message:err,success:false})
@@ -118,6 +122,27 @@ const getAllUsers = async(req,res) =>{
     res.status(400).send({message:err})
    }
 }
+const blockUser = async(req,res) =>{
+    try{
+        const {user_id} = req.body;
+        const user = await User.findByIdAndUpdate(user_id,{
+            isBlocked:true
+        })
+        res.status(200).send({message:'user blocked',user});
+    }catch(err){
+        console.log({err})
+    }
+}
+const getUserById = async(req,res)=>{
+    try{
+        const {id} = req.params;
+        const user = await  User.findById(id);
+        res.status(200).send({message:'user found',user})
+    }catch(err){
+        console.log({err})
+        res.status(400).send({message:err})
+    }
+}
 module.exports = {
     signUp,
     isPaidUser,
@@ -126,5 +151,7 @@ module.exports = {
     signIn,
     updateProfile,
     addSong,
-    getAllUsers
+    getAllUsers,
+    blockUser,
+    getUserById
 }

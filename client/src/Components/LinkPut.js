@@ -42,9 +42,11 @@ const LinkPut = () => {
   }
   const addSong = async ()=>{
     try{
+        const id = localStorage.getItem('user-id');
         setLoader(true)
         const {data} = await axios.post('http://localhost:4000/song/addSong',{
-            url:URLs
+            url:URLs,
+            user_id:id
         });
         const {song} = data;
         setLoader(false);
