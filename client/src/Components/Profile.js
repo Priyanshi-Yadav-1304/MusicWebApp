@@ -15,7 +15,7 @@ import whatsapp from './assests/icons8-whatsapp-32.png'
 import correct from './assests/icons8-correct-48 (2).png'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { Button, FileInput, Group, Modal, Textarea, TextInput } from '@mantine/core';
+import { BackgroundImage, Button, FileInput, Group, Modal, Textarea, TextInput } from '@mantine/core';
 import { IconUpload } from '@tabler/icons';
 import Footer from './Footer'
 
@@ -26,9 +26,26 @@ function Profile() {
   const [about, setAbout] = useState('');
   const [profession, setProfession] = useState('');
   const [instaId,setInstaId] = useState('');
+  const [service, setService] = useState([]);
+  const [url, setUrl] = useState([]);
   useEffect(() => {
     getUserProfile();
+    getServices();
   },[]);
+  const getServices = async() => {
+    try{
+      const {data} = await axios.get('http://localhost:4000/service/getService');
+      const {services} = data;
+      setService(services);
+      let urlArray = [];
+      services.forEach((s,index)=>{
+        urlArray = [...urlArray, {image_url:s.secure_url,song_url:'',service_id:s._id}]
+      })
+      setUrl(urlArray);
+    }catch(err){
+      console.log({err})
+    }
+  }
   const getUserProfile = async()=>{
     try{
       const id = localStorage.getItem('user-id')
@@ -56,7 +73,8 @@ function Profile() {
         about,
         profession,
         instaId,
-        id
+        id,
+        service:url
       });
       getUserProfile();
       setOpenModal(false)
@@ -77,6 +95,13 @@ function Profile() {
   const handleAbout = (e) =>{
     if(e.target.value.length <= 250)
       setAbout(e.target.value);
+  }
+  const handleUrl = (e,index) =>{
+    const image_url = url[index].image_url;
+    const song_url = e.target.value;
+    let urlArray = url;
+    urlArray[index]= {image_url,song_url};
+    setUrl([...urlArray])
   }
   return (
   <> 
@@ -113,12 +138,24 @@ function Profile() {
        value={instaId}
        onChange={(e) => setInstaId(e.target.value)}
         />
+        {
+          service.map((s,index)=>{
+            return <Group>
+            <BackgroundImage src={s.secure_url} className='profile-service-modal'></BackgroundImage>
+            <TextInput
+         className='edit-input link-input-modal'
+       value={url[index].song_url}
+       onChange={(e) => handleUrl(e,index)}
+        />
+        </Group>
+          })
+        }
         <Group className='edit-input'>
           <Button color='teal.7' onClick={updateProfile}>Save</Button>
           <Button color='red.7' onClick={()=> setOpenModal(false)}>Cancel</Button>
         </Group>
       </Modal>
-
+     
         <div className='profilefirst'>
              <div className='pro1'>
               <div className='prophoto'>
@@ -154,52 +191,26 @@ function Profile() {
               </div>
              </div>
         </div>
-
-        <div className='AppArea'>
-            <div className='extraspace'></div>
-             <div className='aa1'>
-               <div>
-                    <img style={{height:"5vmin"}} src={spotify} alt="" />
-                    <button>Play</button>
+        <div className='profile-links'>
+         <div className='profile-links-option'>
+           {
+            User.profileLinks.map((service,index)=>{
+                    if(service.song_url.trim()){
+                      return <div key={index} className='playmusic-service-card profile-link-card'>
+                     <BackgroundImage  className='playmusic-service'
+                src={`${service.image_url}`}
+                radius="sm"
+            >
+                 </BackgroundImage>
+                    <a href={service.song_url} target='_blank'><button className='play-btn'>Play</button></a>
                </div>
-               <div>
-                    <img style={{height:"10vmin"}} src={youtube} alt="" />
-                    <button>Play</button>
-               </div>
-               <div>
-                    <img style={{height:"5vmin"}} src={amazone} alt="" />
-                    <button>Play</button>
-               </div>
-               <div>
-                    <img style={{height:'4vmin'}} src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Gaana_%28music_streaming_service%29_logo.png/1200px-Gaana_%28music_streaming_service%29_logo.png?20220222152415'  alt="" />
-                    <button>Play</button>
-               </div>
-             </div>
-             
-            <div className='line'></div>
-
-             <div className='aa2'>
-             <div>
-                    <img style={{height:"5vmin"}} src="https://cdn2.downdetector.com/static/uploads/logo/amazonmusiclogo_CG06xih.png" alt="" />
-                    <button>Play</button>
-               </div>
-               <div>
-                    <img style={{height:'5vmin'}} src="https://www.seekpng.com/png/full/8-84344_samsung-make-google-play-their-default-music-service.png"  alt="" />
-                    <button>Play</button>
-               </div>
-               <div>
-                    <img style={{height:'3vmin'}} src={soundcloud} alt="" />
-                    <button>Play</button>
-               </div>
-               <div>
-                    <img style={{height:'13vmin'}} src={jio} alt="" />
-                    <button>Play</button>
-               </div>
-             </div>
-             <div  className='extraspace'></div>
-        </div>
-
-
+                    }else{
+                      return <></>
+                    }
+            })
+        }
+         </div>
+         </div>
         <div className='lastOne'>
              <p className='p'>POWERED BY</p>
               <div className='onewali'>

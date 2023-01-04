@@ -7,37 +7,32 @@ import { addUrl } from "../fileIndex";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "./Footer";
 
-const LinkPut = () => {
-  const [service, setService] = useState([]);
+const UpdateSong = () => {
   const [loader,setLoader] = useState(false); 
   const [URLs, setURLs] = useState([]);
   const navigate = useNavigate();
+  const {id} = useParams();
   useEffect(() => {
-    getService();
-  }, []);
-  const getService = async () => {
-    try {
-        setLoader(true);
-      const { data } = await axios.get(
-        "http://localhost:4000/service/getService"
-      );
-      const { services } = data;
-      setService(services);
-      let urlArray = [];
-      services.forEach((s,index)=>{
-        urlArray = [...urlArray, {image_url:s.secure_url,song_url:'',service_id:s._id}]
-      })
-      setURLs(urlArray);
-      setLoader(false);
-     } catch (err) {
-      console.log({ err });
-      setLoader(false)
+    if(id){
+      getSongDetails()
     }
-  };
+  }, []);
+ const getSongDetails = async () =>{
+  try{
+      const {data} = await axios.get(`http://localhost:4000/song/getSongToUpdate/${id}`);
+      const {newServices} = data;
+    //   setService(data.newservices);
+    //   let urlArray = [];
+    //   newServices.forEach((s,index)=>{
+    //     urlArray = [...urlArray, {image_url:s.secure_url,song_url:'',service_id:s._id}]
+    //   })
+      setURLs(newServices);
+  }catch(err){
+    console.log({err})
+  }
+ }
   const deleteService = async (index) =>{
-   let arr = service.filter((item,i) => i!==index);
    let urls = URLs.filter((item,i) => i!==index);
-   setService(arr);
    setURLs(urls);
   }
   const addSong = async ()=>{
@@ -79,8 +74,8 @@ const LinkPut = () => {
         </Button>
       </Group>
       <div className="service">
-        {service.length >= 0 ? (
-           service.map((serviceInfo,index) =>
+        {URLs.length >= 0 ? (
+           URLs.map((serviceInfo,index) =>
             <Card
             key={index}
             shadow="sm"
@@ -91,14 +86,14 @@ const LinkPut = () => {
           >
             <CardSection className="card-section-image">
             <BackgroundImage className="service-logo"
-                src={serviceInfo.secure_url}
+                src={serviceInfo.image_url}
                 radius="sm"
             ></BackgroundImage>
             <Image style={{cursor:'pointer'}} height={30} width={30} src={deleteIcon} onClick={()=> deleteService(index)} color="red.8" variant="light">
               Delete
             </Image>
             </CardSection>
-            <TextInput value={URLs[index].url} onChange= {(e)=> addUrl(e,index)} className="service-card-input" placeholder="Enter url here" />
+            <TextInput value={URLs[index].song_url} onChange= {(e)=> addUrl(e,index)} className="service-card-input" placeholder="Enter url here" />
           </Card>
            )
         ) : (
@@ -111,4 +106,4 @@ const LinkPut = () => {
   );
 };
 
-export default LinkPut;
+export default UpdateSong;

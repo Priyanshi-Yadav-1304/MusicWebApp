@@ -4,6 +4,7 @@ const songModel = new mongoose.Schema({
     socialUrl:[{
         image_url:String,
         song_url:String,
+        service_id:String
     }],
     image:{
         public_id:String,
@@ -16,7 +17,8 @@ const songModel = new mongoose.Schema({
     clicked:{
         type:Number,
         default:0
-    }
+    },
+    clickTime:[]
 })
 const song = mongoose.model("song",songModel);
 module.exports =  song;

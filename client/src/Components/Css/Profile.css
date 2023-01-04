@@ -106,3 +106,28 @@
 .edit-input{
     margin-top: 2vmin;
 }
+.profile-service-modal{
+    height:10vmin;
+    width: 10vmin;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.link-input-modal{
+    width: 75%;
+}
+.profile-links{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.profile-links-option{
+    display: flex;
+    width: 45%;
+    flex-wrap: wrap;
+}
+.profile-link-card{
+    width: 20%;
+    display: flex;
+}

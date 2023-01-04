@@ -42,7 +42,7 @@ const getSongDetails = async (req,res)=>{
     try{
         const id = req.params.id;
         const song = await Song.findById(id);
-        await song.updateOne({clicked:song.clicked+1});
+        await song.updateOne({clicked:song.clicked+1,clickTime:[...song?.clickTime,new Date()]});
         res.status(200).send({message:'song found',song})       
     }catch(err){
         res.status(400).send({message:err})
@@ -73,10 +73,65 @@ const getDetails = async(req,res)=>{
         res.status(400).send({message:err})
     }
 }
+const getSongToUpdate = async(req,res)=>{
+    try{
+        const id = req.params.id;
+        const song = await Song.findById(id);
+        const services = await Service.find({});
+        let newServices = []
+        services.forEach((service)=>{
+            let flag = false;
+            song.socialUrl.forEach((url)=>{
+                if(service.secure_url === url.image_url){
+                    newServices = [...newServices,{
+                      image_url:url.image_url,
+                      song_url:url.song_url
+                    }] 
+                    flag = true;
+                }
+            })
+            if(!flag){
+                newServices = [...newServices,{
+                    image_url:service.secure_url,
+                    song_url:''
+                }]
+            }
+        })
+        res.status(200).send({message:'song found',newServices});
+    }catch(err){
+        res.status(400).send({message:err});
+    }
+}
+const getClicksByMonth = async(req,res) => {
+    try{
+        const {month,id} = req.params;
+        const song = await Song.findById(id);
+        let monthlyClicks = 0;
+        console.log({song})
+        if(song.clickTime.length == 0 ){
+            res.status(200).send({monthlyClicks})
+        }else{
+            song.clickTime.forEach((time,index)=>{
+                console.log({date:time.month() + 1})
+                if(new Date(time).month() +1  == month){
+                    monthlyClicks = monthlyClicks + 1;
+                }
+                if(song.clickTime.length-1 === index){
+                    res.status(200).send({monthlyClicks})
+                }
+            })
+        }
+    }catch(err){
+        res.status(400).send({message:err})
+    }
+}
+
 module.exports ={
     addSongUrl,
     addSongCover,
     getSongDetails,
     getSongs,
-    getDetails
+    getDetails,
+    getSongToUpdate,
+    getClicksByMonth,
 }

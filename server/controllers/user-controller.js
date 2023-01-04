@@ -84,7 +84,7 @@ const signIn = async (req,res) =>{
 }
 const updateProfile = async(req,res)=>{
     try{
-        const {id,image,about,profession,instaId} = req.body;
+        const {id,image,about,profession,instaId,service} = req.body;
         const user = await User.findById(id);
         if(image){
             await cloudinary.v2.uploader.destroy(user.image.public_id);
@@ -97,7 +97,7 @@ const updateProfile = async(req,res)=>{
             let newImage = {public_id,secure_url}
             const updatedUser = await user.update({about,profession,instaId,image:newImage});
         }else{
-            const updatedUser = await user.update({about,profession,instaId});
+            const updatedUser = await user.update({about,profession,instaId,profileLinks:service});
         }
         res.status(200).send({message:"successful",success:true});
     }catch(err){

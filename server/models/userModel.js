@@ -11,6 +11,7 @@ const userModel = new mongoose.Schema({
     about:String,
     profession:String,
     onBoardingTime:Date,
+    profileLinks:[]
 },{timestamps:true})
 const user = mongoose.model("user",userModel);
 module.exports = user;

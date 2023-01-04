@@ -13,6 +13,7 @@ import Profile from "./Components/Profile";
 import Services from "./Components/Services";
 import Signin from "./Components/Signin";
 import Signup from "./Components/Signup";
+import UpdateSong from "./Components/UpdateSong";
 // import UploadService from "./Components/UploadService";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           {/* <Route path="/" element={<Home/>}></Route> */}
           <Route path="/linkPut" element={<LinkPut/>}></Route>
+          <Route path="/updateSong/:id" element={<UpdateSong/>}></Route>
           <Route path="/inputImage/:id" element={<InputImage/>}></Route>
           <Route path="/playMusic/:id" element={<PlayMusic/>}></Route>
           <Route path="/signup" element={<Signup/>}></Route>
