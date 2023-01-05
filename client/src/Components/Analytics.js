@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 const Analytics = () => {
   const [songs, setSongs] = useState([]);
   const [open, setOpen] = useState(false);
+  const [openUser, setOpenUser] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     getSongs();
@@ -26,8 +27,10 @@ const Analytics = () => {
     }
   }
   const getGraph = (song_id) =>{
-    console.log({song_id})
+      console.log({song_id})
     getClicksByMonth(song_id);
+    setOpenUser(true);
+   
   }
   const getClicksByMonth = async(song_id) => {
     try{
@@ -65,6 +68,40 @@ const Analytics = () => {
         opened={open}
         onClose={() => setOpen(false)}
       >
+      </Modal>
+      <Modal  size={1000} opened={openUser} onClose={() => setOpenUser(false)}>
+          <div className='graphbox'>
+          <select class="monthsdiv">
+          <option value="january">January</option>
+          <option value="feb">February</option>
+          <option value="march">March</option>
+          <option value="april">April</option>
+          <option value="may">May</option>
+          <option value="june">June</option>
+          <option value="july">July</option>
+          <option value="august">August</option>
+          <option value="september">September</option>
+          <option value="october">October</option>
+          <option value="november">November</option>
+          <option value="december">December</option>
+       </select>
+
+       <div className='countrydiv'>
+            <h1>Country</h1>
+            <p>India: 50</p>
+            <p>Pakistan: 50</p>
+            <p>Australia: 60</p>
+            <p>USA: 70</p>
+       </div>
+        
+       <div className='countrydiv'>
+            <h1>Total Clicks</h1>
+             <p>505</p>
+       </div>
+      
+          </div>
+        
+        
       </Modal>
         <Footer />
     </div>
