@@ -3,6 +3,7 @@
     width: 100%;
     display: flex;
     padding: 2vmin;
+    flex-wrap: wrap;
 }
 .analytics-card{
     height: 30vmin;
@@ -44,4 +45,19 @@
     background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;
+}
+.graphbox{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.monthsdiv{
+    border: 1px solid grey;
+}
+.countrydiv{
+    width: 20vmin;
+    border: 1px solid grey;
+}
+.countrydiv > h1{
+    border-bottom: 1px solid black;
 }

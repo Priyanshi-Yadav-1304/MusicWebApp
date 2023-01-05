@@ -4,7 +4,9 @@ import React, { useEffect, useState } from "react";
 import "./Css/Service.css";
 import deleteIcon from './assests/deleteIcon.png'
 import eyeImg from './assests/eye.jpeg'
+import { useNavigate } from 'react-router-dom'
 const Services = () => {
+  const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [File, setFile] = useState("");
   const [service, setService] = useState([]);
@@ -252,7 +254,7 @@ const Services = () => {
                               <h3>{details.totalLinks}</h3>
                               <div className="eyeimg">
                               <div></div>
-                               <BackgroundImage onClick={()=> setOpenUser(true)} className="paid-users-eye" src={eyeImg}></BackgroundImage>
+                               <BackgroundImage onClick={()=> navigate("/analytics")} className="paid-users-eye" src={eyeImg}></BackgroundImage>
                              </div>
                             </div>
                     </div>
@@ -262,7 +264,7 @@ const Services = () => {
                               <h3>{details.totalClicks}</h3>
                              <div className="eyeimg">
                               <div></div>
-                               <BackgroundImage onClick={()=> setOpenUser(true)} className="paid-users-eye" src={eyeImg}></BackgroundImage>
+                               <BackgroundImage onClick={()=> navigate("/analytics")} className="paid-users-eye" src={eyeImg}></BackgroundImage>
                              </div>
                           </div>
                     </div>

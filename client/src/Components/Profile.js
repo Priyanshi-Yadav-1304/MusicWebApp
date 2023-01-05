@@ -164,7 +164,7 @@ function Profile() {
               <div className='proname'>
                 <div>
                 <p className='name'>{User.name}</p>
-                <button style={{border:'none',padding:'1vmin',color:'white',cursor:'pointer',backgroundColor:'#38BBFF',marginTop:'1vmin'}} onClick={()=> openEditForm()}>Edit Profile</button>
+                <button style={{border:'none',padding:'1vmin',color:'white',cursor:'pointer',backgroundColor:'#20a8d0',marginTop:'1vmin'}} onClick={()=> openEditForm()}>Edit Profile</button>
                 <img src={correct} alt="" />
                 </div>
                 <p className='job'>{User.profession}</p>
