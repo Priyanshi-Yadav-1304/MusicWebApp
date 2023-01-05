@@ -44,10 +44,12 @@ function PlayMusic() {
             <div className='pv1'>
                 <div className='pvspace'></div>
 
-
                 <div className='pvmain'>
                     <div className='imgbox'>
-                        <img style={{width:"50vmin",height:'50vmin'}} src={song?.image?.secure_url} alt="" />
+                    <BackgroundImage className='photo-centre'  src={song?.image?.secure_url} >
+                    <img style={{width:"40vmin",height:'40vmin'}} src={song?.image?.secure_url} alt="" />
+                    </BackgroundImage>
+                        
                     </div>
                     <h1>{song?.songTitle}</h1>
                     <p>{song?.artistName}</p>

@@ -45,7 +45,7 @@
     flex-direction: column;
     justify-content: space-around;
 }
-.onboard1 > img{
+.onboard1> img{
     width: 22vmin;
     height: 22vmin;
     border-radius: 50vmin;
@@ -67,5 +67,9 @@
     border-radius: 0.8vmin;
     border: 1px solid black;
     margin-left: 42vmin;
+    cursor: pointer;
+}
+.uploadPhoto{
+    color: blue;
     cursor: pointer;
 }
