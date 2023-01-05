@@ -3,6 +3,8 @@
     width: 100%;
     display: flex;
     padding: 2vmin;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .analytics-card{
     height: 30vmin;

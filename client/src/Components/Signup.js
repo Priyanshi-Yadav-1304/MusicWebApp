@@ -19,6 +19,7 @@ function Signup() {
     const {success,user} = data;
      if(success){
         localStorage.setItem('user-id',user._id);
+        localStorage.setItem('artist-name',user.artistName)
         navigate('/payment')
      }
     }catch(err){

@@ -15,7 +15,7 @@ import whatsapp from './assests/icons8-whatsapp-32.png'
 import correct from './assests/icons8-correct-48 (2).png'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { BackgroundImage, Button, FileInput, Group, Modal, Textarea, TextInput } from '@mantine/core';
+import { BackgroundImage, Button, FileInput, Group, LoadingOverlay, Modal, Textarea, TextInput } from '@mantine/core';
 import { IconUpload } from '@tabler/icons';
 import Footer from './Footer'
 
@@ -28,25 +28,24 @@ function Profile() {
   const [instaId,setInstaId] = useState('');
   const [service, setService] = useState([]);
   const [url, setUrl] = useState([]);
+  const [loader, setLoader] = useState(false);
   useEffect(() => {
-    getUserProfile();
     getServices();
   },[]);
   const getServices = async() => {
     try{
+      setLoader(true);
       const {data} = await axios.get('http://localhost:4000/service/getService');
       const {services} = data;
       setService(services);
-      let urlArray = [];
-      services.forEach((s,index)=>{
-        urlArray = [...urlArray, {image_url:s.secure_url,song_url:'',service_id:s._id}]
-      })
-      setUrl(urlArray);
+      getUserProfile(services);
+      setLoader(false)
     }catch(err){
+      setLoader(false)
       console.log({err})
     }
   }
-  const getUserProfile = async()=>{
+  const getUserProfile = async(services)=>{
     try{
       const id = localStorage.getItem('user-id')
       const {data} = await axios.post('http://localhost:4000/user/profile',{
@@ -54,6 +53,20 @@ function Profile() {
       })
       const {user} = data;
       setUser(user);
+      let urlArray = [];
+      services.forEach((link)=>{
+        let flag = true;
+        user.profileLinks.forEach((newLink)=>{
+            if(link.secure_url == newLink.image_url){
+              urlArray = [...urlArray,newLink];
+              flag = false;
+            }
+        })
+        if(flag){
+          urlArray = [...urlArray, {image_url:link.secure_url,song_url:'',service_id:link._id}];
+        }
+      })
+      setUrl([...urlArray]);
     }catch(err){
       console.log({err})
     }
@@ -81,6 +94,7 @@ function Profile() {
     }catch(err){
       console.log({err})
     }
+    console.log('end')
   }
   const openEditForm = () =>{
     setInstaId(User.instaId);
@@ -103,6 +117,7 @@ function Profile() {
     urlArray[index]= {image_url,song_url};
     setUrl([...urlArray])
   }
+  console.log({url})
   return (
   <> 
     {
@@ -139,12 +154,12 @@ function Profile() {
        onChange={(e) => setInstaId(e.target.value)}
         />
         {
-          service.map((s,index)=>{
+          url.map((s,index)=>{
             return <Group>
-            <BackgroundImage src={s.secure_url} className='profile-service-modal'></BackgroundImage>
+            <BackgroundImage src={s.image_url} className='profile-service-modal'></BackgroundImage>
             <TextInput
          className='edit-input link-input-modal'
-       value={url[index].song_url}
+       value={s.song_url}
        onChange={(e) => handleUrl(e,index)}
         />
         </Group>
@@ -231,6 +246,7 @@ function Profile() {
     </div>
     :<></>
     }
+     <LoadingOverlay visible={loader} overlayBlur={2} />
      <Footer />
   </>
   )

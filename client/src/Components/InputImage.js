@@ -51,6 +51,7 @@ function InputImage() {
   const addSongDetails = async() =>{
       try{
         setLoader(true);
+        const artistName = localStorage.getItem('artist-name')
         await axios.post(`http://localhost:4000/song/addSongCover/${id}`,{
           image:file,
           artistName:'',
@@ -58,7 +59,7 @@ function InputImage() {
           instaId:instagramId
         });
         setLoader(false);
-        navigate(`/playMusic/${id}`)
+        navigate(`/playMusic/${artistName}/${id}`)
       }catch(err){
         console.log({err});
         setLoader(false)

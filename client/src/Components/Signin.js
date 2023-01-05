@@ -15,6 +15,7 @@ function Signin() {
       });
       let {user} = data;
       localStorage.setItem('user-id',user._id)
+      localStorage.setItem('artist-name',user.artistName)
       navigate(`/profile`)
     }catch(err){
       const {message} = err.response.data;

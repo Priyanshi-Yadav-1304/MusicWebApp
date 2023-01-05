@@ -25,7 +25,7 @@ function App() {
           <Route path="/linkPut" element={<LinkPut/>}></Route>
           <Route path="/updateSong/:id" element={<UpdateSong/>}></Route>
           <Route path="/inputImage/:id" element={<InputImage/>}></Route>
-          <Route path="/playMusic/:id" element={<PlayMusic/>}></Route>
+          <Route path="/playMusic/:songName/:id" element={<PlayMusic/>}></Route>
           <Route path="/signup" element={<Signup/>}></Route>
           <Route path="/" element={<Signin/>}></Route>
           <Route path="/onboarding" element={<Onboarding/>}></Route>
