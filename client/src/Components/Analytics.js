@@ -10,6 +10,8 @@ const Analytics = () => {
   const [songs, setSongs] = useState([]);
   const [open, setOpen] = useState(false);
   const [openUser, setOpenUser] = useState(false);
+  const [month, setMonth] = useState('january');
+  const [clicks, setClicks] = useState(0);
   const navigate = useNavigate();
   useEffect(() => {
     getSongs();
@@ -26,11 +28,15 @@ const Analytics = () => {
       console.log({err})
     }
   }
-  const getGraph = (song_id) =>{
-      console.log({song_id})
-    getClicksByMonth(song_id);
+  const getGraph = (clicks) =>{
+    //   console.log({song_id})
+    // getClicksByMonth(song_id);
     setOpenUser(true);
+    setClicks(clicks);
    
+  }
+  const changeMonth = (e) =>{
+      setMonth(e.target.value)
   }
   const getClicksByMonth = async(song_id) => {
     try{
@@ -57,7 +63,7 @@ const Analytics = () => {
                </div>
             </div>
             <div className='lower-card-analytics'>
-               <BackgroundImage className='lower-card-analytics-image' onClick={() => getGraph(song._id)} src={analytics}></BackgroundImage>
+               <BackgroundImage className='lower-card-analytics-image' onClick={() => getGraph(song.clicked)} src={analytics}></BackgroundImage>
                <div></div>
                <BackgroundImage className='lower-card-analytics-image' src={editAnalytics} onClick={()=> navigate(`/updateSong/${song._id}`)}></BackgroundImage>
             </div>
@@ -71,7 +77,7 @@ const Analytics = () => {
       </Modal>
       <Modal  size={1000} opened={openUser} onClose={() => setOpenUser(false)}>
           <div className='graphbox'>
-          <select class="monthsdiv">
+          <select class="monthsdiv" onChange={changeMonth}>
           <option value="january">January</option>
           <option value="feb">February</option>
           <option value="march">March</option>
@@ -96,7 +102,7 @@ const Analytics = () => {
         
        <div className='countrydiv'>
             <h1>Total Clicks</h1>
-             <p>505</p>
+             <h2>{month === 'january'? clicks : "0"}</h2>
        </div>
       
           </div>
