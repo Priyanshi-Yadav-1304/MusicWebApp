@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import './Css/PlayMusic.css'
 import './Css/Profile.css'
-// import {Link} from 'react-router-dom'
-import insta from './assests/icons8-instagram-48.png'
 import instagram from './assests/icons8-instagram-48.png'
-import youtubelogo from './assests/icons8-youtube-48.png'
-import spotify from './assests/Spotify_Logo_CMYK_Green-removebg-preview.png'
-import youtube from './assests/8gzcr6RpGStvZFA2qRt4v6-removebg-preview.png'
-import amazone from './assests/56-565024_amazon-logo-png-amazon-png-transparent-png-removebg-preview.png'
-import jio from './assests/jiosaavn-logo-300x169-removebg-preview.png'
-import soundcloud from './assests/2560px-Soundcloud_logo.svg-removebg-preview.png'
 import phone from './assests/icons8-phone-50.png'
 import whatsapp from './assests/icons8-whatsapp-32.png'
 import correct from './assests/icons8-correct-48 (2).png'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { BackgroundImage, Button, FileInput, Group, LoadingOverlay, Modal, Textarea, TextInput } from '@mantine/core';
 import { IconUpload } from '@tabler/icons';
 import Footer from './Footer'
+import Axios from '../AxiosConfig/Axios'
 
 function Profile() {
   const [User, setUser] = useState(null);
@@ -29,6 +22,10 @@ function Profile() {
   const [service, setService] = useState([]);
   const [url, setUrl] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [latestSong, setLatestSong] = useState('');
+  const [embededUrl, setEmbededUrl] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const {username} = useParams();
   useEffect(() => {
     getServices();
   },[]);
@@ -47,12 +44,14 @@ function Profile() {
   }
   const getUserProfile = async(services)=>{
     try{
-      const id = localStorage.getItem('user-id')
-      const {data} = await axios.post('http://localhost:4000/user/profile',{
-        id
+      const {data} = await Axios({
+        method:'POST',
+        url:`/user/profile/${username}`,
       })
       const {user} = data;
       setUser(user);
+      setEmbededUrl(user.latestSong.trim() ? true : false);
+      setShowEdit(data.editable)
       let urlArray = [];
       services.forEach((link)=>{
         let flag = true;
@@ -81,12 +80,13 @@ function Profile() {
   const updateProfile = async() => {
     try{
       const id = localStorage.getItem('user-id')
-      const res = await axios.post(`http://localhost:4000/user/updateProfile`,{
+       await axios.post(`http://localhost:4000/user/updateProfile`,{
         image:file,
         about,
         profession,
         instaId,
         id,
+        latestSong,
         service:url
       });
       getUserProfile();
@@ -100,6 +100,7 @@ function Profile() {
     setInstaId(User.instaId);
     setAbout(User.about);
     setProfession(User.profession);
+    setLatestSong(User.latestSong)
     setOpenModal(true)
   }
   const handleProfession = (e) =>{
@@ -153,6 +154,13 @@ function Profile() {
        value={instaId}
        onChange={(e) => setInstaId(e.target.value)}
         />
+         <TextInput
+         className='edit-input'
+       label="Latest song on youtube"
+       placeholder='Enter your latest song url from youtube'
+       value={latestSong}
+       onChange={(e) => setLatestSong(e.target.value)}
+        />
         {
           url.map((s,index)=>{
             return <Group>
@@ -179,32 +187,28 @@ function Profile() {
               <div className='proname'>
                 <div>
                 <p className='name'>{User.name}</p>
-                <button style={{border:'none',padding:'1vmin',color:'white',cursor:'pointer',backgroundColor:'#20a8d0',marginTop:'1vmin'}} onClick={()=> openEditForm()}>Edit Profile</button>
+                {
+                  showEdit && (
+                    <button style={{border:'none',padding:'1vmin',color:'white',cursor:'pointer',backgroundColor:'#20a8d0',marginTop:'1vmin'}} onClick={()=> openEditForm()}>Edit Profile</button>
+                  )
+                }
                 <img src={correct} alt="" />
                 </div>
                 <p className='job'>{User.profession}</p>
                 <p className='discription'>{User.about}</p>
               </div>
              </div>
-             <div className='pro2'>
-              <div className='applink'>
-                <div className='insta'>
-                  <div></div>
-                  <a href={User.instaId} target="_blank"><img style={{height:"4vmin"}} src={insta} alt="" /></a>
-                  <p>Instagram</p>
-                  <div></div>
+             {
+              embededUrl && (
+                <div className='pro2'>
+                <div className='applink'>
                 </div>
-                <div className='youtube'>
-                  <div></div>
-                  <img style={{height:"4vmin"}} src={youtubelogo} alt="" />
-                  <p>YouTube</p>
-                  <div></div>
+                <div className='video'>
+                      <iframe className='youtube-frame' width="356" height="200" src={`https://www.youtube.com/embed/${User.latestSong.slice(User.latestSong.indexOf("=")+1)}`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
-              </div>
-              <div className='video'>
-              <iframe className='youtube-frame' width="356" height="200" src="https://www.youtube.com/embed/oQ7Jzl6BiTE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              </div>
-             </div>
+               </div>
+              )
+             }
         </div>
         <div className='profile-links'>
          <div className='profile-links-option'>

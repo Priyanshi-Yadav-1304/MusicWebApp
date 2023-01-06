@@ -5,6 +5,7 @@ import "./Css/Service.css";
 import deleteIcon from './assests/deleteIcon.png'
 import eyeImg from './assests/eye.jpeg'
 import { useNavigate } from 'react-router-dom'
+import Axios from "../AxiosConfig/Axios";
 const Services = () => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
@@ -15,6 +16,7 @@ const Services = () => {
   const [openUser, setOpenUser] = useState(false);
   const [totalPaidUsers, setTotalPaidUsers] = useState(0);
   const [totalUnPaidUsers, setTotalUnpaidUsers] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [details, setDetails] = useState({
     signUpTime:'',
     signUpDate:'',
@@ -32,8 +34,21 @@ const Services = () => {
     };
   }
   useEffect(() => {
-    getService();
+    verifyAdmin();
   }, []);
+  const verifyAdmin = async () => {
+    try{
+      const res = await Axios({
+          method:'POST',
+          url:'/user/isValidAdmin'
+      });
+      getService();
+      setIsAdmin(true);
+    }catch(err){
+      navigate('/forbidden')
+      console.log({err});
+    }
+  }
   const getService = async () => {
     try {
         setLoader(true);
@@ -134,7 +149,10 @@ const Services = () => {
   }
   return (
     <div className="service-page">
-      <Group>
+      {
+        isAdmin && (
+          <>
+            <Group>
         <Button
           onClick={() => setOpenModal(true)}
           variant="dark"
@@ -271,6 +289,9 @@ const Services = () => {
                 </div>
       </Modal>
       </div>
+          </>
+        )
+      }
     </div>
   );
 };

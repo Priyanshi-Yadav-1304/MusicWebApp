@@ -27,10 +27,16 @@ function Onboarding() {
           const id = localStorage.getItem('user-id')
           const {data} = await axios.get('http://localhost:4000/user/payment/'+id);
           const {success} = data;
+          const {user} = data;
           if(success === false){
             navigate('/payment')
           }else{
-            setShow(true)
+            console.log({user})
+            if(user.isOnBoarded){
+              navigate('/');
+            }else{
+              setShow(true);
+            }
           }
       }catch(err){
         console.log(err)
@@ -45,13 +51,14 @@ function Onboarding() {
       return;
     }
     const id = localStorage.getItem('user-id')
-    await axios.post('http://localhost:4000/user/onboarding',{
+    const {data} = await axios.post('http://localhost:4000/user/onboarding',{
       id,
       name,
       instaId,
       image:file
     })
-    navigate(`/profile`)
+    const {username} = data.user;
+    navigate(`/${username}`)
    }catch(err){
     console.log(err)
    }

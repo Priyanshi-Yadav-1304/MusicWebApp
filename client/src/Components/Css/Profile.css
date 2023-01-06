@@ -10,7 +10,7 @@
     flex-direction: column;
 }
 .profilefirst{
-    height: 70vmin;
+    /* height: 70vmin; */
     margin-top: 15vmin;
     display: flex;
     flex-direction: column;
