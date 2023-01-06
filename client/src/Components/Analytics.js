@@ -100,9 +100,9 @@ const Analytics = () => {
             <p>USA: 70</p>
        </div>
         
-       <div className='countrydiv'>
+       <div className='clicksdiv'>
             <h1>Total Clicks</h1>
-             <h2>{month === 'january'? clicks : "0"}</h2>
+             <div><h2>{month === 'january'? clicks : "0"}</h2></div>
        </div>
       
           </div>

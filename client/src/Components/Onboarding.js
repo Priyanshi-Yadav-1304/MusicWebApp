@@ -3,6 +3,7 @@ import './Css/Onboarding.css'
 import image from './assests/no-image-available-icon-ui-260nw-1458092489-removebg-preview.png'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+// import { BackgroundImage } from '@mantine/core'
 function Onboarding() {
   const [show, setShow] = useState(false);
   const [file, setFile] = useState(image);
@@ -65,7 +66,7 @@ function Onboarding() {
            <div className='onboard1'>
               <img src={file}   alt="" />
               <input  type="file" id="img" onChange={(e)=> handleChange(e)} style={{display:"none"}}/>
-              <label  for="img">Upload Photo (optional)</label>
+              <label className='uploadPhoto'  for="img">Upload Photo (optional)</label>
            </div>
            <div className='onboard2'>
             <input type="text" placeholder='Your Artist Name' value={name} onChange={(e) => setName(e.target.value)}/>
