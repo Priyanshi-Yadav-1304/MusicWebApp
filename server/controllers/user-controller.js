@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken")
 const signUp = async(req,res) =>{
     try{
         const {email,password} = req.body;
-        // const encryptPassword = await brcypt.hash(password,10);
         const user  = await User.create({email,password});
         res.status(201).send({success:true,message:"user signed up successfully",user})
     }catch(err){
@@ -19,9 +18,9 @@ const isPaidUser = async (req,res) =>{
         const id = req.params.id;
         const user = await User.findById(id);
         if(user.isPaid){
-            res.status(200).send({message:"paid user",success:true})
+            res.status(200).send({message:"paid user",success:true,user})
         }else{
-            res.status(401).send({message:"unpaid user",success:false})
+            res.status(401).send({message:"unpaid user",success:false,user})
         }
     }catch(err){
         res.status(400).send({message:err,success:false})
@@ -42,7 +41,8 @@ const saveDetails =  async (req,res) =>{
                 public_id,
                 secure_url
             },
-            onBoardingTime:new Date()
+            onBoardingTime:new Date(),
+            isOnBoarded:true,
         },{new:true});
         res.status(200).send({message:"profile created",success:true,user})
     }catch(err){
@@ -69,8 +69,7 @@ const signIn = async (req,res) =>{
             if(user.isBlocked){
                 res.status(403).send({message:'you are blocked by admin'})
             }else{
-                const token = await jwt.sign({id:user._id},'qwertyui876543efbgfre345678ytfdxer4567yhbgvfr56');
-
+                const token = await jwt.sign({id:user._id},process.env.JWT_SECRET);
                 res.status(200).cookie('token',token,{
                     httpOnly:true
                 }).send({message:'user signed in successfully',success:true,user})
@@ -105,6 +104,7 @@ const updateProfile = async(req,res)=>{
         res.status(400).send({message:err,success:false})
     }
 }
+
 
 const addSong = async (req,res) =>{
     try{
@@ -143,6 +143,9 @@ const getUserById = async(req,res)=>{
         res.status(400).send({message:err})
     }
 }
+const validAdmin = (req,res) =>{
+    res.status(200).send({message:'ok',success:true})
+}
 module.exports = {
     signUp,
     isPaidUser,
@@ -153,5 +156,6 @@ module.exports = {
     addSong,
     getAllUsers,
     blockUser,
-    getUserById
+    getUserById,
+    validAdmin
 }

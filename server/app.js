@@ -1,17 +1,17 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors =  require("cors")
-
 var userRouter = require('./routes/user');
 const serviceRouter = require('./routes/service-routes')
 const songRouter = require('./routes/song-routes');
-
 const fileUpload = require("express-fileupload");
 require("./models/dbConfig")
 require("./cloudConfig")
+
 
 var app = express();
 
@@ -19,7 +19,7 @@ var app = express();
 app.set('veiw engine', 'ejs')
 app.set("trust proxy", true);
 
-app.use(cors({credentials:true}))
+app.use(cors({credentials:true, origin:'http://localhost:3000'}))
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(
   fileUpload({
