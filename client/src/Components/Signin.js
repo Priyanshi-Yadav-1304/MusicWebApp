@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Link ,useNavigate } from 'react-router-dom';
+import Axios from '../AxiosConfig/Axios';
 import './Css/Signup.css'
 
 function Signin() {
@@ -10,13 +11,18 @@ function Signin() {
   const signInAPI =  async (e) =>{
     e.preventDefault();
     try{
-      const {data} = await axios.post('http://localhost:4000/user/signIn',{
-        email,password
-      });
+      const {data} = await Axios({
+        method:'POST',
+        url:'/user/signIn',
+        data:{
+          email,
+          password
+        }
+      })
       let {user} = data;
       localStorage.setItem('user-id',user._id)
       localStorage.setItem('artist-name',user.artistName)
-      navigate(`/profile`)
+      navigate(`/${user.username}`)
     }catch(err){
       const {message} = err.response.data;
       console.log({err})

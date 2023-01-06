@@ -2,6 +2,7 @@
 // import { Footer } from "@mantine/core";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Analytics from "./Components/Analytics";
+import Forbidden from "./Components/Forbidden";
 
 // import Home from "./Components/Home";
 import InputImage from "./Components/InputImage";
@@ -29,11 +30,11 @@ function App() {
           <Route path="/signup" element={<Signup/>}></Route>
           <Route path="/" element={<Signin/>}></Route>
           <Route path="/onboarding" element={<Onboarding/>}></Route>
-          <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/:username" element={<Profile />}></Route>
           <Route path="/payment" element={<Payment />}></Route>
           <Route path="/services" element={<Services />}></Route>
           <Route path="/analytics" element={<Analytics />}></Route>
-
+          <Route path="/forbidden" element={<Forbidden />}></Route>
         </Routes>
       </Router>
       
