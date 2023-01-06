@@ -29,6 +29,7 @@ const isPaidUser = async (req,res) =>{
 const saveDetails =  async (req,res) =>{
     try{
         const {name,instaId,image,id} = req.body;
+        const username = name.split(" ").join("");
         const { public_id, secure_url } = await cloudinary.v2.uploader.upload(
             image,
             {
@@ -37,6 +38,7 @@ const saveDetails =  async (req,res) =>{
           );
         const user = await User.findByIdAndUpdate(id,{
             name,instaId,
+            username,
             image:{
                 public_id,
                 secure_url
@@ -52,9 +54,17 @@ const saveDetails =  async (req,res) =>{
 }
 const getDetails = async (req,res) =>{
     try{
-        const {id} = req.body;
-        const user = await User.findById(id);
-        res.status(200).send({message:"successful",success:true,user});
+        const username = req.params.username;
+        const user = await User.findOne({username});
+        const token = req.cookies.token;
+        let editable = false;
+        if(token){
+            const isValidToken = await jwt.verify(token,process.env.JWT_SECRET);
+            if(isValidToken && isValidToken.id == user._id){
+                editable = true;
+            }
+        }
+        res.status(200).send({message:"successful",success:true,user,editable});
     }catch(err){
         res.status(400).send({message:err,success:false})
     }
@@ -83,7 +93,7 @@ const signIn = async (req,res) =>{
 }
 const updateProfile = async(req,res)=>{
     try{
-        const {id,image,about,profession,instaId,service} = req.body;
+        const {id,image,about,profession,instaId,service,latestSong} = req.body;
         const user = await User.findById(id);
         if(image){
             await cloudinary.v2.uploader.destroy(user.image.public_id);
@@ -94,9 +104,9 @@ const updateProfile = async(req,res)=>{
                 }
               );
             let newImage = {public_id,secure_url}
-            const updatedUser = await user.update({about,profession,instaId,image:newImage});
+            const updatedUser = await user.update({about,profession,instaId,image:newImage,latestSong});
         }else{
-            const updatedUser = await user.update({about,profession,instaId,profileLinks:service});
+            const updatedUser = await user.update({about,profession,instaId,profileLinks:service,latestSong});
         }
         res.status(200).send({message:"successful",success:true});
     }catch(err){

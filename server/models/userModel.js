@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const userModel = new mongoose.Schema({
     email:String,
     name:String,
+    username:String,
     password:String,
     isPaid:{
         type:Boolean,
@@ -25,6 +26,10 @@ const userModel = new mongoose.Schema({
     isAdmin:{
         type:Boolean,
         default:false,
+    },
+    latestSong:{
+        type:String,
+        default:'',
     }
 },{timestamps:true})
 const user = mongoose.model("user",userModel);

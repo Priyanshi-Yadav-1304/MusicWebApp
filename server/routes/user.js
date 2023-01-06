@@ -7,7 +7,7 @@ const isLoggedIn = require('../middlewares/isLoggedIn');
 router.post('/signup',signUp);
 router.post('/onboarding',saveDetails)
 router.get('/payment/:id',isPaidUser)
-router.post('/profile',isLoggedIn,getDetails)
+router.post('/profile/:username',getDetails)
 router.post('/signIn',signIn);
 router.post('/addSong',addSong)
 router.post('/updateProfile',updateProfile)
