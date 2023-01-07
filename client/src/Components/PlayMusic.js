@@ -3,11 +3,6 @@ import './Css/PlayMusic.css'
 import insta from './assests/icons8-instagram-26.png'
 import instagram from './assests/icons8-instagram-48.png'
 import youtubemusic from './assests/play-icon-button-video-vector-isolated-illustration-symbol-white-business-modern-graphic-sign-shape-object-element-circle-web-148064268-removebg-preview.png'
-import spotify from './assests/Spotify_Logo_CMYK_Green-removebg-preview.png'
-import youtube from './assests/8gzcr6RpGStvZFA2qRt4v6-removebg-preview.png'
-import amazone from './assests/56-565024_amazon-logo-png-amazon-png-transparent-png-removebg-preview.png'
-import jio from './assests/jiosaavn-logo-300x169-removebg-preview.png'
-import soundcloud from './assests/2560px-Soundcloud_logo.svg-removebg-preview.png'
 import phone from './assests/icons8-phone-50.png'
 import whatsapp from './assests/icons8-whatsapp-32.png'
 import profile from './assests/icons8-male-user-48.png'
@@ -19,10 +14,10 @@ import Footer from './Footer'
 
 function PlayMusic() {
     const [song, setSong] = useState(null);
-    const [services, setServices] = useState([]);
     useEffect(() => {
        getSongDetails();
     }, []);
+    const {username} = useParams();
     const {id} = useParams();
     const getSongDetails =  async () =>{
         try{
@@ -52,7 +47,7 @@ function PlayMusic() {
                         
                     </div>
                     <h1>{song?.songTitle}</h1>
-                    <p>{song?.artistName}</p>
+                    <p>{username}</p>
                 </div>
 
 
@@ -60,7 +55,7 @@ function PlayMusic() {
             <div className='pv2'>
                 <div className='pvmain2'>
                     <div className='pm21'>
-                        <p>{song?.artistName}</p>
+                        <p>{username}</p>
                         <a href={`${song?.instaId}`} target="_blank"><img style={{height:"3.8vmin"}} src={insta} alt="" /></a>
                     </div>
                     <div className='pm22'>

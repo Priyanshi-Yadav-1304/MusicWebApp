@@ -34,8 +34,20 @@ function InputImage() {
     };
   }
   useEffect(() => {
-    getUserInstaId();
+    checkSong();
   }, []);
+  const checkSong = async() => {
+    try{
+      await Axios({
+        method:'GET',
+        url:`/song/checkSong/${id}`
+      })
+      getUserInstaId();
+    }catch(err){
+      console.log({err});
+      navigate('/forbidden')
+    }
+  }
   const getUserInstaId = async() =>{
     try{
       setLoader(true);
@@ -65,7 +77,7 @@ function InputImage() {
         });
         const {song,username} = data;
         setLoader(false);
-        navigate(`/${username}/${song.songTitle}/${id}`)
+        navigate(`/${username}/${song.songTitle.split(" ").join("")}/${id}`)
       }catch(err){
         console.log({err});
         setLoader(false)

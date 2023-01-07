@@ -48,7 +48,7 @@ const Analytics = () => {
     }
   } 
   return (
-    <div className='analytics-page'>
+    <div className="analytics-page">
        {
         songs.map((song,index)=>{
             return <Card key={index} withBorder className='analytics-card'>

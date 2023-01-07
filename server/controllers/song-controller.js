@@ -128,7 +128,19 @@ const getClicksByMonth = async(req,res) => {
         res.status(400).send({message:err})
     }
 }
-
+const checkSong = async(req,res) => {
+    try{
+        const {id} = req.params;
+        const song = await Song.findById(id);
+        if(song.songTitle){
+            res.status(409).send({message:'song already exists'});
+        }else{
+            res.status(200).send({message:'song not exists'});
+        }
+    }catch(err){
+        res.status(400).send({message:err});
+    }
+}
 module.exports ={
     addSongUrl,
     addSongCover,
@@ -137,4 +149,5 @@ module.exports ={
     getDetails,
     getSongToUpdate,
     getClicksByMonth,
+    checkSong
 }

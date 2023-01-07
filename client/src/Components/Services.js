@@ -8,16 +8,20 @@ import {
   Image,
   LoadingOverlay,
   Modal,
+  Notification,
+  Pagination,
   TextInput,
   Title,
 } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./Css/Service.css";
-import deleteIcon from "./assests/deleteIcon.png";
+
 import eyeImg from "./assests/eye.jpeg";
 import { useNavigate } from "react-router-dom";
 import Axios from "../AxiosConfig/Axios";
+import { IconCheck, IconX } from "@tabler/icons";
+import PaginationList from "./PaginationList";
 const Services = () => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
@@ -30,6 +34,8 @@ const Services = () => {
   const [totalUnPaidUsers, setTotalUnpaidUsers] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const [serviceName, setServiceName] = useState("");
+  const [blocked, setBlocked] = useState(false);
+  const [unableToBlock, setUnableToBlock] = useState(false);
   const [details, setDetails] = useState({
     signUpTime: "",
     signUpDate: "",
@@ -168,9 +174,10 @@ const Services = () => {
       const res = await axios.post("/user/blockUser", {
         user_id,
       });
-      console.log({ res });
+       setBlocked(true);
     } catch (err) {
       console.log({ err });
+      setUnableToBlock(true);
     }
   };
   const getDate = (createdAt) => {
@@ -193,6 +200,7 @@ const Services = () => {
   };
   return (
     <div className="service-page">
+      
       {isAdmin && (
         <>
           <Group>
@@ -209,43 +217,7 @@ const Services = () => {
             </Button>
           </Group>
           <div className="service">
-            {service.length >= 0 ? (
-              service.map((serviceInfo, index) => (
-                <Card
-                  key={index}
-                  shadow="sm"
-                  p="lg"
-                  radius="md"
-                  withBorder
-                  className="service-card"
-                >
-                  <CardSection className="card-section-image">
-                    <BackgroundImage
-                      className="service-logo"
-                      src={serviceInfo.secure_url}
-                      radius="sm"
-                    ></BackgroundImage>
-                    <Image
-                      style={{ cursor: "pointer" }}
-                      height={30}
-                      width={30}
-                      src={deleteIcon}
-                      onClick={() => deleteService(serviceInfo._id)}
-                      color="red.8"
-                      variant="light"
-                    >
-                      Delete
-                    </Image>
-                  </CardSection>
-                  <TextInput
-                    className="service-card-input"
-                    placeholder="Enter url here"
-                  />
-                </Card>
-              ))
-            ) : (
-              <></>
-            )}
+           <PaginationList service={service} deleteService={deleteService}/>
             <Modal opened={openModal} onClose={() => setOpenModal(false)}>
               <form>
                 <TextInput
@@ -324,6 +296,20 @@ const Services = () => {
               opened={openUser}
               onClose={() => setOpenUser(false)}
             >
+          {
+            blocked && (
+              <Notification className='block-notification' onClose={()=> setBlocked(false)}   icon={<IconCheck size={18} />} color="teal">
+              User blocked successfully
+            </Notification>
+            )
+          }
+      {
+        unableToBlock && (
+          <Notification className="block-notification" onClose={()=> setUnableToBlock(false)}  icon={<IconX size={18} />} color="red">
+          Sorry, something went wrong!
+        </Notification>
+        )
+      }
               <button
                 className="blockbtn"
                 onClick={() => blockUser(details.user_id)}
