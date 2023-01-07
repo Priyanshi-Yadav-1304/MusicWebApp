@@ -1,4 +1,4 @@
-import { BackgroundImage, Button, Card, CardSection, FileInput, Group, Image, LoadingOverlay, Modal, TextInput } from "@mantine/core";
+import { BackgroundImage, Button, Card, CardSection, FileInput, Group, Image, LoadingOverlay, Modal, Select, TextInput } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./Css/Service.css";
@@ -9,6 +9,7 @@ import Footer from "./Footer";
 
 const LinkPut = () => {
   const [service, setService] = useState([]);
+  const [filterServices,setFilterServices] = useState([]);
   const [loader,setLoader] = useState(false); 
   const [URLs, setURLs] = useState([]);
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const LinkPut = () => {
       );
       const { services } = data;
       setService(services);
+      setFilterServices(services)
       let urlArray = [];
       services.forEach((s,index)=>{
         urlArray = [...urlArray, {image_url:s.secure_url,song_url:'',service_id:s._id}]
@@ -38,6 +40,7 @@ const LinkPut = () => {
    let arr = service.filter((item,i) => i!==index);
    let urls = URLs.filter((item,i) => i!==index);
    setService(arr);
+   setFilterServices(arr);
    setURLs(urls);
   }
   const addSong = async ()=>{
@@ -63,9 +66,24 @@ const LinkPut = () => {
     urlArray[index]= {image_url,song_url};
     setURLs([...urlArray])
   }
+  console.log({service})
+  const onFilterServices = (value) => {
+     if(value === ''){
+      setFilterServices(service);
+      return;
+     }
+     const filteredServices =  service.filter((service) => service.name.toLowerCase().startsWith(value.toLowerCase()));
+     setFilterServices(filteredServices);
+  }
   return (
     <div className="service-page">
       <Group>
+      <Select
+      placeholder="search services"
+      searchable
+      data={[]}
+      onSearchChange={(value) => onFilterServices(value)}
+    />
         <Button
           onClick={() => addSong()}
           variant="dark"
@@ -79,8 +97,8 @@ const LinkPut = () => {
         </Button>
       </Group>
       <div className="service">
-        {service.length >= 0 ? (
-           service.map((serviceInfo,index) =>
+        {filterServices?.length >= 0 ? (
+           filterServices?.map((serviceInfo,index) =>
             <Card
             key={index}
             shadow="sm"
@@ -102,7 +120,8 @@ const LinkPut = () => {
           </Card>
            )
         ) : (
-          <></>
+          <>
+          </>
         )}
         <LoadingOverlay visible={loader} overlayBlur={1} />
       </div>

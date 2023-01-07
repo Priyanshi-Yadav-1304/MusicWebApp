@@ -20,6 +20,9 @@ const addSongCover = async (req,res) =>{
     try{
         const id = req.params.id;
         const {image,artistName,songTitle,instaId} = req.body;
+        const user = await User.findById(req.user_id);
+        console.log({req})
+        console.log(req.user_id)
         const { public_id, secure_url } = await cloudinary.v2.uploader.upload(
             image,
             {
@@ -33,7 +36,7 @@ const addSongCover = async (req,res) =>{
             },
             artistName,songTitle,instaId
         },{new:true});
-        res.status(200).send({message:"song updated",song});
+        res.status(200).send({message:"song updated",song,username:user.username});
     }catch(err){
         res.status(400).send({message:err})
     }
