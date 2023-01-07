@@ -16,6 +16,7 @@ import {
 } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Axios from "../AxiosConfig/Axios";
 
 function InputImage() {
   const [file, setFile] = useState(image);
@@ -52,14 +53,19 @@ function InputImage() {
       try{
         setLoader(true);
         const artistName = localStorage.getItem('artist-name')
-        await axios.post(`http://localhost:4000/song/addSongCover/${id}`,{
-          image:file,
-          artistName:'',
-          songTitle,
-          instaId:instagramId
+        const {data} = await Axios({
+          method:'POST',
+          url:`/song/addSongCover/${id}`,
+          data:{
+            image:file,
+            artistName:'',
+            songTitle,
+            instaId:instagramId
+          }
         });
+        const {song,username} = data;
         setLoader(false);
-        navigate(`/playMusic/${artistName}/${id}`)
+        navigate(`/${username}/${song.songTitle}/${id}`)
       }catch(err){
         console.log({err});
         setLoader(false)

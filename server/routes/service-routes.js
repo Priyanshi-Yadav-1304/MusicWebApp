@@ -6,6 +6,6 @@ const isLoggedIn = require('../middlewares/isLoggedIn');
 
 serviceRouter.post('/addService',isLoggedIn,isAdmin,addService);
 serviceRouter.get('/getService',getService)
-serviceRouter.post('/deleteService',isLoggedIn,isAdmin,deleteService)
+serviceRouter.post('/deleteService/:id',isLoggedIn,isAdmin,deleteService)
 
 module.exports = serviceRouter;
