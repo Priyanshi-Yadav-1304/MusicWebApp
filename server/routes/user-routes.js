@@ -15,5 +15,5 @@ router.post('/blockUser',isLoggedIn,blockUser)
 router.get('/getUserById/:id',getUserById)
 router.post('/isValidAdmin',isLoggedIn,isAdmin,validAdmin)
 router.post('/addSong',isLoggedIn,addSong)
-router.post('/isLoggedIn',isLoggedIn,logInMsg)
+router.get('/isLoggedIn',isLoggedIn,logInMsg)
 module.exports = router;

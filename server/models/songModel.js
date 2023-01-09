@@ -4,7 +4,8 @@ const songModel = new mongoose.Schema({
     socialUrl:[{
         image_url:String,
         song_url:String,
-        service_id:String
+        service_id:String,
+        name:String,
     }],
     image:{
         public_id:String,

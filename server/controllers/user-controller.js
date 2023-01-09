@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const signUp = async(req,res) =>{
     try{
         const {email,password} = req.body;
-        const user  = await User.create({email,password,username:email});
+        const user  = await User.create({email,password,username:email.toLowerCase()});
         const token = await jwt.sign({id:user._id},process.env.JWT_SECRET);
         res.status(201).cookie('token',token,{
             httpOnly:true
@@ -32,7 +32,7 @@ const isPaidUser = async (req,res) =>{
 const saveDetails =  async (req,res) =>{
     try{
         const {name,instaId,image,id} = req.body;
-        const username = name.split(" ").join("");
+        const username = name.split(" ").join("").toLowerCase();
         const { public_id, secure_url } = await cloudinary.v2.uploader.upload(
             image,
             {
