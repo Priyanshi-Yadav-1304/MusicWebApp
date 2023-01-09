@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Axios from "../AxiosConfig/Axios";
 
+
 function InputImage() {
   const [file, setFile] = useState(image);
   const [loader, setLoader] = useState(false);
@@ -45,7 +46,7 @@ function InputImage() {
       getUserInstaId();
     }catch(err){
       console.log({err});
-      navigate('/forbidden')
+      navigate('/')
     }
   }
   const getUserInstaId = async() =>{
@@ -58,10 +59,23 @@ function InputImage() {
       setLoader(false);
     }catch(err){
       console.log({err});
+      navigate('/')
       setLoader(false)
     }
   }
+  const validate =  () => {
+    if(file === image){
+      alert('please upload image');
+      return false;
+    }else if(songTitle.length === 0){
+      alert('please enter song title');
+      return false;
+    }else{
+      return true;
+    }
+  }
   const addSongDetails = async() =>{
+    if(validate()){
       try{
         setLoader(true);
         const artistName = localStorage.getItem('artist-name')
@@ -82,6 +96,7 @@ function InputImage() {
         console.log({err});
         setLoader(false)
       }
+    }
   }
   return (
     <>
@@ -113,7 +128,7 @@ function InputImage() {
           <CardSection>
             <div className="input-image-input">
               <Title order={4}>Song Title</Title>
-              <TextInput withAsterisk value={songTitle} onChange={(e) => setSongTitle(e.target.value)} placeholder="Enter song title" />
+              <TextInput   value={songTitle} onChange={(e) => setSongTitle(e.target.value)} placeholder="Enter song title" />
             </div>
             <div className="input-image-input">
               <Title order={4}>Instagram ID</Title>

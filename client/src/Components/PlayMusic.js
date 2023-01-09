@@ -23,6 +23,7 @@ function PlayMusic() {
         try{
             const {data} = await axios.post(`http://localhost:4000/song/getSongDetails/${id}`);
             const {song} = data;
+            console.log({song})
             setSong(song)
         }catch(err){
             console.log({err})

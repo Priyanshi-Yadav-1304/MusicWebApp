@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React ,{useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import Axios from '../AxiosConfig/Axios';
 import './Css/Signup.css'
 function Signup() {
   const [email, setEmail] = useState('');
@@ -12,10 +13,14 @@ function Signup() {
       if(!validateEmail(email)) return;
       if(!checkPassword(password)) return;
       e.preventDefault();
-      const {data} = await axios.post('http://localhost:4000/user/signup',{
-      email,
+    const {data} = await Axios({
+      method:'POST',
+      url:'/user/signup',
+      data:{
+        email,
       password,
-    });
+      }
+    })
     const {success,user} = data;
      if(success){
         localStorage.setItem('user-id',user._id);
@@ -62,7 +67,7 @@ function Signup() {
              </div>
               <button>SIGN UP</button>
           </form>
-          <Link className='link' to="/signin">SignIn</Link>
+          <Link className='link' to="/">SignIn</Link>
           </div>
     </div>
     </>
