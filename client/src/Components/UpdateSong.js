@@ -6,6 +6,7 @@ import deleteIcon from './assests/deleteIcon.png'
 import { addUrl } from "../fileIndex";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "./Footer";
+import Axios from "../AxiosConfig/Axios";
 
 const UpdateSong = () => {
   const [loader,setLoader] = useState(false); 
@@ -19,16 +20,15 @@ const UpdateSong = () => {
   }, []);
  const getSongDetails = async () =>{
   try{
-      const {data} = await axios.get(`http://localhost:4000/song/getSongToUpdate/${id}`);
+      const {data} = await Axios({
+        method:'GET',
+        url:`/song/getSongToUpdate/${id}`
+      })
       const {newServices} = data;
-    //   setService(data.newservices);
-    //   let urlArray = [];
-    //   newServices.forEach((s,index)=>{
-    //     urlArray = [...urlArray, {image_url:s.secure_url,song_url:'',service_id:s._id}]
-    //   })
       setURLs(newServices);
   }catch(err){
     console.log({err})
+    navigate('/')
   }
  }
   const deleteService = async (index) =>{

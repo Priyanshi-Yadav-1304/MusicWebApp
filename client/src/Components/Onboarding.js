@@ -3,6 +3,7 @@ import './Css/Onboarding.css'
 import image from './assests/no-image-available-icon-ui-260nw-1458092489-removebg-preview.png'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Axios from '../AxiosConfig/Axios';
 // import { BackgroundImage } from '@mantine/core'
 function Onboarding() {
   const [show, setShow] = useState(false);
@@ -24,23 +25,24 @@ function Onboarding() {
   }, []);
   const callAPI = async()=>{
       try{
-          const id = localStorage.getItem('user-id')
-          const {data} = await axios.get('http://localhost:4000/user/payment/'+id);
+          const {data} = await Axios({
+            method:'GET',
+            url:`/user/payment`
+          })
           const {success} = data;
           const {user} = data;
           if(success === false){
             navigate('/payment')
           }else{
-            console.log({user})
-            if(user.isOnBoarded){
-              navigate('/');
+            if(!user.isPaid){
+              navigate('/payment');
             }else{
               setShow(true);
             }
           }
       }catch(err){
         console.log(err)
-        navigate('/payment')
+        navigate('/')
       }
   }
   const handleSubmit = async(e) =>{
@@ -51,11 +53,15 @@ function Onboarding() {
       return;
     }
     const id = localStorage.getItem('user-id')
-    const {data} = await axios.post('http://localhost:4000/user/onboarding',{
-      id,
-      name,
-      instaId,
-      image:file
+    const {data} = await Axios({
+      method:'POST',
+      url:'user/onboarding',
+      data:{
+        id,
+        name,
+        instaId,
+        image:file
+      }
     })
     const {username} = data.user;
     navigate(`/${username}`)

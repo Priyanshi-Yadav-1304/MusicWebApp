@@ -6,7 +6,7 @@ import phone from './assests/icons8-phone-50.png'
 import whatsapp from './assests/icons8-whatsapp-32.png'
 import correct from './assests/icons8-correct-48 (2).png'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { BackgroundImage, Button, FileInput, Group, LoadingOverlay, Modal, Textarea, TextInput } from '@mantine/core';
 import { IconUpload } from '@tabler/icons';
 import Footer from './Footer'
@@ -26,19 +26,24 @@ function Profile() {
   const [embededUrl, setEmbededUrl] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const {username} = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     getServices();
   },[]);
   const getServices = async() => {
     try{
       setLoader(true);
-      const {data} = await axios.get('http://localhost:4000/service/getService');
+      const {data} = await Axios({
+        method:'GET',
+        url:'/service/getService'
+      })
       const {services} = data;
       setService(services);
       getUserProfile(services);
       setLoader(false)
     }catch(err){
       setLoader(false)
+      navigate('/');
       console.log({err})
     }
   }
@@ -48,10 +53,13 @@ function Profile() {
         method:'POST',
         url:`/user/profile/${username}`,
       })
-      const {user} = data;
+      const {user,editable} = data;
+      if(!user.isOnBoarded && !editable){
+        navigate('/onboarding')
+      }
       setUser(user);
       setEmbededUrl(user.latestSong.trim() ? true : false);
-      setShowEdit(data.editable)
+      setShowEdit(editable)
       let urlArray = [];
       services.forEach((link)=>{
         let flag = true;
@@ -68,6 +76,7 @@ function Profile() {
       setUrl([...urlArray]);
     }catch(err){
       console.log({err})
+      navigate('/');
     }
   }
   function handleChange(file) {
@@ -94,7 +103,6 @@ function Profile() {
     }catch(err){
       console.log({err})
     }
-    console.log('end')
   }
   const openEditForm = () =>{
     setInstaId(User.instaId);
@@ -118,7 +126,6 @@ function Profile() {
     urlArray[index]= {image_url,song_url};
     setUrl([...urlArray])
   }
-  console.log({url})
   return (
   <> 
     {

@@ -1,13 +1,16 @@
 const User = require("../models/userModel");
 const cloudinary = require("cloudinary")
 const brcypt = require('bcrypt')
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 const signUp = async(req,res) =>{
     try{
         const {email,password} = req.body;
-        const user  = await User.create({email,password});
-        res.status(201).send({success:true,message:"user signed up successfully",user})
+        const user  = await User.create({email,password,username:email.toLowerCase()});
+        const token = await jwt.sign({id:user._id},process.env.JWT_SECRET);
+        res.status(201).cookie('token',token,{
+            httpOnly:true
+        }).send({success:true,message:"user signed up successfully",user})
     }catch(err){
         console.log(err);
         res.status(400).send({success:false,message:err})
@@ -15,12 +18,12 @@ const signUp = async(req,res) =>{
 }
 const isPaidUser = async (req,res) =>{
     try{
-        const id = req.params.id;
+        const id = req.user_id;
         const user = await User.findById(id);
         if(user.isPaid){
             res.status(200).send({message:"paid user",success:true,user})
         }else{
-            res.status(401).send({message:"unpaid user",success:false,user})
+            res.status(200).send({message:"unpaid user",success:false,user})
         }
     }catch(err){
         res.status(400).send({message:err,success:false})
@@ -29,7 +32,7 @@ const isPaidUser = async (req,res) =>{
 const saveDetails =  async (req,res) =>{
     try{
         const {name,instaId,image,id} = req.body;
-        const username = name.split(" ").join("");
+        const username = name.split(" ").join("").toLowerCase();
         const { public_id, secure_url } = await cloudinary.v2.uploader.upload(
             image,
             {
@@ -55,16 +58,21 @@ const saveDetails =  async (req,res) =>{
 const getDetails = async (req,res) =>{
     try{
         const username = req.params.username;
-        const user = await User.findOne({username});
+        let user = null;
+        if(username){
+            user = await User.findOne({username});
+        }
+
         const token = req.cookies.token;
         let editable = false;
+        const isOnBoarded = user.isOnBoarded;
         if(token){
             const isValidToken = await jwt.verify(token,process.env.JWT_SECRET);
             if(isValidToken && isValidToken.id == user._id){
                 editable = true;
             }
         }
-        res.status(200).send({message:"successful",success:true,user,editable});
+        res.status(200).send({message:"successful",success:true,user,editable,isOnBoarded});
     }catch(err){
         res.status(400).send({message:err,success:false})
     }
@@ -74,7 +82,6 @@ const signIn = async (req,res) =>{
         const {email,password} = req.body;
         const user = await User.findOne({email});
 
-        // const isValidUser =  await brcypt.compare(password,user.password);
         if(user && user.password === password){
             if(user.isBlocked){
                 res.status(403).send({message:'you are blocked by admin'})
@@ -156,6 +163,9 @@ const getUserById = async(req,res)=>{
 const validAdmin = (req,res) =>{
     res.status(200).send({message:'ok',success:true})
 }
+const logInMsg = (req,res) => {
+    res.status(200).send({isLoggedIn:true})
+}
 module.exports = {
     signUp,
     isPaidUser,
@@ -167,5 +177,6 @@ module.exports = {
     getAllUsers,
     blockUser,
     getUserById,
-    validAdmin
+    validAdmin,
+    logInMsg
 }
