@@ -92,6 +92,7 @@ const LinkPut = () => {
           mt="md"
           radius="md"
           style={{ width: "20vmin", margin: "auto" }}
+          withAsterisk
         >
           Next
         </Button>
@@ -107,7 +108,7 @@ const LinkPut = () => {
             withBorder
             className="service-card"
           >
-            <CardSection className="card-section-image">
+            <CardSection  className="card-section-image">
             <BackgroundImage className="service-logo"
                 src={serviceInfo.secure_url}
                 radius="sm"
@@ -116,7 +117,7 @@ const LinkPut = () => {
               Delete
             </Image>
             </CardSection>
-            <TextInput value={URLs[index].url} onChange= {(e)=> addUrl(e,index)} className="service-card-input" placeholder="Enter url here" />
+            <TextInput withAsterisk required={true} value={URLs[index].url} onChange= {(e)=> addUrl(e,index)} className="service-card-input" placeholder="Enter url here" />
           </Card>
            )
         ) : (

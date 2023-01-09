@@ -41,7 +41,7 @@ function Signin() {
              </div>
               <button>LOG IN</button>
           </form>
-          <Link className='link' to="/Signup">Sign Up</Link>
+          <Link className='link' to="/">Sign Up</Link>
          </div>
     </div>
     </>

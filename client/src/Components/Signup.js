@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React ,{useState} from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Css/Signup.css'
 function Signup() {
   const [email, setEmail] = useState('');
@@ -52,6 +52,7 @@ function Signup() {
   return (
     <>
     <div className='sign'>
+          <div>
           <form className='signupbox' onSubmit={(e)=> handleSubmit(e)}>
               <h1>SIGN UP PAGE</h1>
              <div className='input'>
@@ -61,6 +62,8 @@ function Signup() {
              </div>
               <button>SIGN UP</button>
           </form>
+          <Link className='link' to="/signin">SignIn</Link>
+          </div>
     </div>
     </>
   )

@@ -106,17 +106,18 @@ function InputImage() {
               id="img"
               name="file"
               style={{ display: "none" }}
+              withAsterisk
             />
-            <label htmlFor="img">Upload Image</label>
+            <label className="InputImageLabel" htmlFor="img">Upload Image</label>
           </CardSection>
           <CardSection>
             <div className="input-image-input">
               <Title order={4}>Song Title</Title>
-              <TextInput value={songTitle} onChange={(e) => setSongTitle(e.target.value)} placeholder="Enter song title" />
+              <TextInput withAsterisk value={songTitle} onChange={(e) => setSongTitle(e.target.value)} placeholder="Enter song title" />
             </div>
             <div className="input-image-input">
               <Title order={4}>Instagram ID</Title>
-              <TextInput value={instagramId} onChange={(e) => setInstagramId(e.target.value)} placeholder="Enter instagram id" />
+              <TextInput withAsterisk value={instagramId} onChange={(e) => setInstagramId(e.target.value)} placeholder="Enter instagram id" />
             </div>
           </CardSection>
           <Button onClick={addSongDetails}>Save</Button>

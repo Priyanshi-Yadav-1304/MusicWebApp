@@ -98,6 +98,25 @@ const Analytics = () => {
             <p>Pakistan: 50</p>
             <p>Australia: 60</p>
             <p>USA: 70</p>
+            <p>Portugal: 50</p>
+            <p>Japan: 50</p>
+            <p>Thailand: 50</p>
+            <p>Singapore: 50</p>
+            <p>Italy: 50</p>
+            <p>New Zealand: 50</p>
+            <p>Spain: 50</p>
+            <p>Netherlands: 50</p>
+            <p>Ireland: 50</p>
+            <p>Sri Lanka: 50</p>
+            <p>South Africa: 50</p>
+            <p>Australia: 50</p>
+            <p>Malaysia: 50</p>
+            <p>Germany: 50</p>
+            <p>Indonesia: 50</p>
+            <p>Switzerland: 50</p>
+            <p>Canada: 50</p>
+            <p>China: 50</p>
+            <p>USA: 50</p>
        </div>
         
        <div className='clicksdiv'>
