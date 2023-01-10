@@ -28,6 +28,7 @@ const Analytics = () => {
       console.log({err})
     }
   }
+  console.log({songs})
   const getGraph = (clicks) =>{
     //   console.log({song_id})
     // getClicksByMonth(song_id);
@@ -95,7 +96,7 @@ const Analytics = () => {
        <div className='countrydiv'>
             <h1>Country</h1>
             <p><div>India:</div> <div>50</div></p>
-            <p><div>Pakistan:</div> <div>50</div></p>
+            {/* <p><div>Pakistan:</div> <div>50</div></p>
             <p><div>Australia:</div> <div>50</div></p>
             <p><div>USA:</div> <div>50</div></p>
             <p><div>Portugal:</div> <div>50</div></p>
@@ -115,7 +116,7 @@ const Analytics = () => {
             <p><div>Indonesia:</div> <div>50</div></p>
             <p><div>Switzerland:</div> <div>50</div></p>
             <p><div>Canada:</div> <div>50</div></p>
-            <p><div>China:</div> <div>50</div></p>
+            <p><div>China:</div> <div>50</div></p> */}
        </div>
         
        <div className='clicksdiv'>

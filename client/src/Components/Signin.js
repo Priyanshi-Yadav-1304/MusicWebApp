@@ -22,6 +22,7 @@ function Signin() {
       let {user} = data;
       localStorage.setItem('user-id',user._id)
       localStorage.setItem('artist-name',user.artistName)
+      localStorage.setItem('username',user.username)
       navigate(`/${user.username}`)
     }catch(err){
       const {message} = err.response.data;

@@ -127,9 +127,15 @@ function Profile() {
     urlArray[index]= {image_url,song_url};
     setUrl([...urlArray])
   }
-  const logout = () => {
-    localStorage.removeItem('token-info');
-    navigate("/")
+  const logout = async() => {
+    try{
+      await Axios({
+        method:'GET',
+        url:'/user/logout'
+      })
+    }catch(err){
+      console.log({err})
+    }
   };
   return (
   <> 
@@ -139,7 +145,14 @@ function Profile() {
         <div className='nav'>
             <div></div>
             <h2>ONE BACKLINK</h2>
-            <h3 onClick={logout} className='logout'>Log Out</h3>
+            {
+              showEdit
+               ? (
+                <h3 onClick={logout} className='logout'>Log Out</h3>
+                )
+               :<div></div>
+              } 
+                
         </div>
         <Modal className='edit-profile'
         opened={openModal}

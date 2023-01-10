@@ -30,6 +30,10 @@ const userModel = new mongoose.Schema({
     latestSong:{
         type:String,
         default:'',
+    },
+    country:{
+        type:String,
+        default:"Unknown",
     }
 },{timestamps:true})
 const user = mongoose.model("user",userModel);

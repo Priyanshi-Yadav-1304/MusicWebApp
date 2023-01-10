@@ -44,6 +44,7 @@ const Services = () => {
     totalLinks: 0,
     totalClicks: 0,
     user_id: "",
+    country:"Unknown",
   });
   function handleChange(file) {
     const reader = new FileReader();
@@ -71,9 +72,10 @@ const Services = () => {
   const getService = async () => {
     try {
       setLoader(true);
-      const { data } = await axios.get(
-        "http://localhost:4000/service/getService"
-      );
+      const {data} = await Axios({
+        method:'GET',
+        url:'/service/getService'
+      })
       const { services } = data;
       setService(services);
       getAllUsers();
@@ -85,7 +87,10 @@ const Services = () => {
   };
   const getAllUsers = async () => {
     try {
-      const { data } = await axios.get("http://localhost:4000/user/users");
+      const {data} = await Axios({
+        method:'GET',
+        url:'/user/users'
+      })
       const { users } = data;
       let totalPaid = 0,
         totalUnPaid = 0;
@@ -136,7 +141,7 @@ const Services = () => {
       setLoader(false);
     }
   };
-  const getUserInfo = async (user_id) => {
+  const getUserInfo = async (user_id,index) => {
     try {
       setLoader(true);
       const { data } = await Axios({
@@ -161,6 +166,7 @@ const Services = () => {
         totalLinks,
         totalClicks,
         user_id,
+        country:users[index].country
       });
       setOpenUser(true);
       setLoader(false);
@@ -279,7 +285,7 @@ const Services = () => {
                         <span>Password : {user.password}</span>
                       </div>
                       <BackgroundImage
-                        onClick={() => getUserInfo(user._id)}
+                        onClick={() => getUserInfo(user._id,index)}
                         className="paid-users-eye"
                         src={eyeImg}
                       ></BackgroundImage>
@@ -323,7 +329,7 @@ const Services = () => {
                     <h4>
                       Time:- {details.signUpTime}, {details.signUpDate}
                     </h4>
-                    <h4>Location:-</h4>
+                    <h4>Location:- {details.country}</h4>
                   </div>
                 </div>
                 <div className="eyeboxbox">
@@ -332,7 +338,7 @@ const Services = () => {
                     <h4>
                       Time:- {details.onBoardTime}, {details.onBoardDate}
                     </h4>
-                    <h4>Location:-</h4>
+                    <h4>Location:- {details.country}</h4>
                   </div>
                 </div>
               </div>

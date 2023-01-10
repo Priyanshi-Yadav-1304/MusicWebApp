@@ -1,12 +1,22 @@
 const User = require("../models/userModel");
+const Country = require("../models/countryModel");
 const cloudinary = require("cloudinary")
 const brcypt = require('bcrypt')
 const jwt = require("jsonwebtoken");
 
 const signUp = async(req,res) =>{
     try{
-        const {email,password} = req.body;
-        const user  = await User.create({email,password,username:email.toLowerCase()});
+        const {email,password,longitude ,latitude} = req.body;
+
+        //get country name from country model
+        const countries = await Country.find({});
+        let countryFound = {};
+        countries.forEach((country)=>{
+            if(country.north >= latitude && country.south <= latitude && country.east >= longitude && country.west <= longitude){
+                countryFound = country;
+            }
+        })
+        const user  = await User.create({email,password,username:email.toLowerCase(),country:countryFound.name});
         const token = await jwt.sign({id:user._id},process.env.JWT_SECRET);
         res.status(201).cookie('token',token,{
             httpOnly:true
@@ -16,6 +26,7 @@ const signUp = async(req,res) =>{
         res.status(400).send({success:false,message:err})
     }
 }
+
 const isPaidUser = async (req,res) =>{
     try{
         const id = req.user_id;
@@ -98,6 +109,13 @@ const signIn = async (req,res) =>{
         res.status(400).send({message:"something went wrong...",err,success:false})
     }
 }
+const LogOut = async(req,res) => {
+    try{
+        res.clearCookie('token').status(200).send({message:'logged out'});
+    }catch(err){
+        res.send({message:err});
+    }
+}
 const updateProfile = async(req,res)=>{
     try{
         const {id,image,about,profession,instaId,service,latestSong} = req.body;
@@ -178,5 +196,6 @@ module.exports = {
     blockUser,
     getUserById,
     validAdmin,
-    logInMsg
+    logInMsg,
+    LogOut
 }
