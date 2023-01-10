@@ -40,7 +40,8 @@ function Signup() {
         navigate("/payment");
       }
     } catch (err) {
-      console.log(err);
+      console.log({err});
+      alert(err.response.data.message)
     }
   };
   const validateEmail = (mail) => {

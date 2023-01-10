@@ -5,7 +5,7 @@ const isLoggedIn = require('../middlewares/isLoggedIn');
 
 songRouter.post('/addSong',addSongUrl);
 songRouter.post('/addSongCover/:id',isLoggedIn,addSongCover)
-songRouter.post('/getSongDetails/:id',getSongDetails)
+songRouter.post('/getSongDetails',getSongDetails)
 songRouter.post('/getSongs',getSongs)
 songRouter.post('/getDetails',getDetails)
 songRouter.get('/getSongToUpdate/:id',getSongToUpdate)

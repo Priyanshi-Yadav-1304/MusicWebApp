@@ -67,6 +67,7 @@ function Onboarding() {
     navigate(`/${username}`)
    }catch(err){
     console.log(err)
+    alert(err.response.data.message)
    }
   }
   return (

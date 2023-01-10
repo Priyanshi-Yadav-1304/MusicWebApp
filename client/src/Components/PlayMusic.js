@@ -6,32 +6,47 @@ import youtubemusic from './assests/play-icon-button-video-vector-isolated-illus
 import phone from './assests/icons8-phone-50.png'
 import whatsapp from './assests/icons8-whatsapp-32.png'
 import profile from './assests/icons8-male-user-48.png'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import { useSelector , useDispatch } from 'react-redux'
 import axios from 'axios'
 import { BackgroundImage } from '@mantine/core'
 import Footer from './Footer'
+import Axios from '../AxiosConfig/Axios'
 
 function PlayMusic() {
     const [song, setSong] = useState(null);
+    const [showPage,setShowPage] = useState(false)
+    const navigate = useNavigate();
     useEffect(() => {
        getSongDetails();
     }, []);
-    const {username} = useParams();
-    const {id} = useParams();
+    const {username,songTitle} = useParams();
     const getSongDetails =  async () =>{
         try{
-            const {data} = await axios.post(`http://localhost:4000/song/getSongDetails/${id}`);
+            const {data} = await Axios({
+                method:'POST',
+                url:'/song/getSongDetails',
+                data:{
+                    username,songTitle
+                }
+            })
             const {song} = data;
-            console.log({song})
+            if(Object.keys(song).length === 0){
+                navigate('/')
+            }
             setSong(song)
+            setShowPage(true);
         }catch(err){
             console.log({err})
+           
         }
     }
   return (
    <> 
-    <div className='SongPage'>
+   {
+    showPage && (
+        <>
+         <div className='SongPage'>
         <div className='nav'>
             <div></div>
             <h2>ONE BACKLINK</h2>
@@ -143,6 +158,9 @@ function PlayMusic() {
         </div>
     </div>
     <Footer />
+        </>
+    )
+   }
    </>
   )
 }

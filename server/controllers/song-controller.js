@@ -43,9 +43,19 @@ const addSongCover = async (req,res) =>{
 }
 const getSongDetails = async (req,res)=>{
     try{
-        const id = req.params.id;
-        const song = await Song.findById(id);
-        await song.updateOne({clicked:song.clicked+1,clickTime:[...song?.clickTime,new Date()]});
+        let {username,songTitle} = req.body;
+        username = username.split("-").join(" ");
+        songTitle = songTitle.split("-").join(" ");
+        let songs = await Song.find({});
+        let song = {};
+        songs.forEach((songItem)=>{
+            if(String(songItem.songTitle).toLowerCase().includes(String(songTitle).toLowerCase())){
+                song = songItem;
+            }
+        })
+        if(!song){
+            await song.updateOne({clicked:song.clicked+1,clickTime:[...song?.clickTime,new Date()]});
+        }
         res.status(200).send({message:'song found',song})       
     }catch(err){
         res.status(400).send({message:err})

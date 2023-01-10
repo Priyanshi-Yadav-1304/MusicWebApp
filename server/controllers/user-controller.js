@@ -8,6 +8,13 @@ const signUp = async(req,res) =>{
     try{
         const {email,password,longitude ,latitude} = req.body;
 
+        //check user email already exists or not
+        const existUser = await User.findOne({email});
+        if(existUser){
+            res.status(409).send({message:'user email already exists'});
+            return;
+        }
+
         //get country name from country model
         const countries = await Country.find({});
         let countryFound = {};
@@ -43,7 +50,21 @@ const isPaidUser = async (req,res) =>{
 const saveDetails =  async (req,res) =>{
     try{
         const {name,instaId,image,id} = req.body;
-        const username = name.split(" ").join("-").toLowerCase();
+
+        //check artist name already exists or not
+        const Users = await User.find({});
+        let isUserExists = false;
+        Users.forEach((user)=>{
+            if(String(user.name).toLowerCase().trim() === String(name).toLowerCase().trim()){
+                isUserExists = true;
+            }
+        })
+        if(isUserExists){
+            res.status(409).send({message:'artist name already exists'});
+            return;
+        }
+
+        const username = name.split(" ").join("-").toLowerCase().trim();
         const { public_id, secure_url } = await cloudinary.v2.uploader.upload(
             image,
             {
@@ -51,7 +72,8 @@ const saveDetails =  async (req,res) =>{
             }
           );
         const user = await User.findByIdAndUpdate(id,{
-            name,instaId,
+            name:name.trim(),
+            instaId,
             username,
             image:{
                 public_id,

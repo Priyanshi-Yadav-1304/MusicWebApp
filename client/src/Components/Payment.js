@@ -1,12 +1,34 @@
-import React from 'react'
+import React ,{useState,useEffect} from 'react'
+import { useNavigate } from 'react-router-dom'
+import Axios from '../AxiosConfig/Axios'
 import instagram from './assests/icons8-instagram-48.png'
 import phone from './assests/icons8-phone-50.png'
 import whatsapp from './assests/icons8-whatsapp-32.png'
 import './Css/Payment.css'
 
 const Payment = () => {
+  const [showPage,setShowPage] = useState(false);
+  const navigate = useNavigate();
+  useEffect(() => {
+    isLoggedIn();
+  }, []);
+  const isLoggedIn = async() =>{
+    try{
+      await Axios({
+        method:'GET',
+        url:'/user/isLoggedIn'
+      })
+      setShowPage(true)
+    }catch(err){
+      navigate('/');
+      console.log({err})
+    }
+  }
   return (
-    <div className='PaymentPage'>
+    <>
+     {
+      showPage && (
+        <div className='PaymentPage'>
          <div className='nav'>
             <div></div>
             <h2>ONE BACKLINK</h2>
@@ -42,6 +64,9 @@ const Payment = () => {
               </div>
         </div>
     </div>
+      )
+     }
+    </>
   )
 }
 
