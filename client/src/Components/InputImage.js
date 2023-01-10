@@ -91,7 +91,7 @@ function InputImage() {
         });
         const {song,username} = data;
         setLoader(false);
-        navigate(`/${username}/${song.songTitle.split(" ").join("")}/${id}`)
+        navigate(`/${username}/${song.songTitle.split(" ").join("-").toLowerCase()}/${id}`)
       }catch(err){
         console.log({err});
         setLoader(false)
