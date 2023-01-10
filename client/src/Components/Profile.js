@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import './Css/PlayMusic.css'
 import './Css/Profile.css'
 import instagram from './assests/icons8-instagram-48.png'
+import youtube from './assests/icons8-youtube-48.png'
 import phone from './assests/icons8-phone-50.png'
 import whatsapp from './assests/icons8-whatsapp-32.png'
 import correct from './assests/icons8-correct-48 (2).png'
 import axios from 'axios'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { BackgroundImage, Button, FileInput, Group, LoadingOverlay, Modal, Textarea, TextInput } from '@mantine/core';
 import { IconUpload } from '@tabler/icons';
 import Footer from './Footer'
@@ -126,13 +127,19 @@ function Profile() {
     urlArray[index]= {image_url,song_url};
     setUrl([...urlArray])
   }
+  const logout = () => {
+    localStorage.removeItem('token-info');
+    navigate("/")
+  };
   return (
   <> 
     {
       User ?
       <div className='profilepage'>
         <div className='nav'>
+            <div></div>
             <h2>ONE BACKLINK</h2>
+            <h3 onClick={logout} className='logout'>Log Out</h3>
         </div>
         <Modal className='edit-profile'
         opened={openModal}
@@ -209,6 +216,18 @@ function Profile() {
               embededUrl && (
                 <div className='pro2'>
                 <div className='applink'>
+                  <div className='applinkdiv'>
+                    <div></div>
+                    <img style={{height:"4vmin"}} src={instagram} alt="" />
+                    <p>Instagram</p>
+                    <div></div>
+                  </div>
+                  <div className='applinkdiv'>
+                    <div></div>
+                    <img style={{height:"4vmin"}} src={youtube} alt="" />
+                    <p>Youtube</p>
+                    <div></div>
+                  </div>
                 </div>
                 <div className='video'>
                       <iframe className='youtube-frame' width="356" height="200" src={`https://www.youtube.com/embed/${User.latestSong.slice(User.latestSong.indexOf("=")+1)}`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

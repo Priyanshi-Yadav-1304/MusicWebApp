@@ -32,7 +32,7 @@ const isPaidUser = async (req,res) =>{
 const saveDetails =  async (req,res) =>{
     try{
         const {name,instaId,image,id} = req.body;
-        const username = name.split(" ").join("").toLowerCase();
+        const username = name.split(" ").join("-").toLowerCase();
         const { public_id, secure_url } = await cloudinary.v2.uploader.upload(
             image,
             {

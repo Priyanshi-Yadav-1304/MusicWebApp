@@ -66,12 +66,22 @@
     margin: 5vmin;
 }
 .applink{
-    width: 31vmin;
+    width: 30vmin;
     height: 10vmin;
     margin-left: 5vmin;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    /* border: 1px solid black; */
+}
+.applinkdiv{
+    width: 30vmin;
+    height: 4vmin;
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid #39bbfe;
+    align-items: center;
+    border-radius: 1vmin;
 }
 .insta{
    width: 30vmin;
@@ -130,4 +140,15 @@
 .profile-link-card{
     width: 20%;
     display: flex;
+}
+.nav{
+    display: flex;
+    justify-content: space-between;
+    padding: 0vmin 2vmin;
+    color: white;
+}
+.logout{
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
 }

@@ -33,7 +33,11 @@ function PlayMusic() {
    <> 
     <div className='SongPage'>
         <div className='nav'>
+            <div></div>
             <h2>ONE BACKLINK</h2>
+            <div>
+                
+            </div>
         </div>
 
         <div className='photovideo'>

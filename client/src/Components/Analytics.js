@@ -94,29 +94,28 @@ const Analytics = () => {
 
        <div className='countrydiv'>
             <h1>Country</h1>
-            <p>India: 50</p>
-            <p>Pakistan: 50</p>
-            <p>Australia: 60</p>
-            <p>USA: 70</p>
-            <p>Portugal: 50</p>
-            <p>Japan: 50</p>
-            <p>Thailand: 50</p>
-            <p>Singapore: 50</p>
-            <p>Italy: 50</p>
-            <p>New Zealand: 50</p>
-            <p>Spain: 50</p>
-            <p>Netherlands: 50</p>
-            <p>Ireland: 50</p>
-            <p>Sri Lanka: 50</p>
-            <p>South Africa: 50</p>
-            <p>Australia: 50</p>
-            <p>Malaysia: 50</p>
-            <p>Germany: 50</p>
-            <p>Indonesia: 50</p>
-            <p>Switzerland: 50</p>
-            <p>Canada: 50</p>
-            <p>China: 50</p>
-            <p>USA: 50</p>
+            <p><div>India:</div> <div>50</div></p>
+            <p><div>Pakistan:</div> <div>50</div></p>
+            <p><div>Australia:</div> <div>50</div></p>
+            <p><div>USA:</div> <div>50</div></p>
+            <p><div>Portugal:</div> <div>50</div></p>
+            <p><div>Japan:</div> <div>50</div></p>
+            <p><div>Thailand:</div> <div>50</div></p>
+            <p><div>Singapore:</div> <div>50</div></p>
+            <p><div>Italy:</div> <div>50</div></p>
+            <p><div>New Zealand:</div> <div>50</div></p>
+            <p><div>Spain:</div> <div>50</div></p>
+            <p><div>Netherlands:</div> <div>50</div></p>
+            <p><div>Ireland:</div> <div>50</div></p>
+            <p><div>Sri Lanka:</div> <div>50</div></p>
+            <p><div>South Africa:</div> <div>50</div></p>
+            <p><div>Australia:</div> <div>50</div></p>
+            <p><div>Malaysia:</div> <div>50</div></p>
+            <p><div>Germany:</div> <div>50</div></p>
+            <p><div>Indonesia:</div> <div>50</div></p>
+            <p><div>Switzerland:</div> <div>50</div></p>
+            <p><div>Canada:</div> <div>50</div></p>
+            <p><div>China:</div> <div>50</div></p>
        </div>
         
        <div className='clicksdiv'>

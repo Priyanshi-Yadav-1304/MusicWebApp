@@ -82,8 +82,8 @@ function Onboarding() {
               <label className='uploadPhoto'  for="img">Upload Photo (optional)</label>
            </div>
            <div className='onboard2'>
-            <input type="text" placeholder='Your Artist Name' value={name} onChange={(e) => setName(e.target.value)}/>
-            <input type="text" placeholder='Your Instagram Profile (optional)' value={instaId} onChange={(e)=> setInstaId(e.target.value)}/>
+            <input className='onboardinginputshift' type="text" placeholder='Your Artist Name' value={name} onChange={(e) => setName(e.target.value)}/>
+            <input className='onboardinginputshift' type="text" placeholder='Your Instagram Profile (optional)' value={instaId} onChange={(e)=> setInstaId(e.target.value)}/>
             <button type='submit'>Proceed</button>
            </div>
          </div>

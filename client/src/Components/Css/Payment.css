@@ -1,0 +1,30 @@
+.PaymentPage{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.pricingArea{
+    width: 80vmin;
+    height: 40vmin;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    color: black;
+    margin-top: 15vmin;
+}
+.money{
+    width: 15vmin;
+    border: 6px solid black;
+    border-radius: 5vmin;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.buy{
+    width: 30vmin;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
