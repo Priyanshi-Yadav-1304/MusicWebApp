@@ -28,7 +28,7 @@ const isPaidUser = async (req,res) =>{
     }catch(err){
         res.status(400).send({message:err,success:false})
     }
-}
+} 
 const saveDetails =  async (req,res) =>{
     try{
         const {name,instaId,image,id} = req.body;
