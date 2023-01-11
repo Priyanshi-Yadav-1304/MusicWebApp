@@ -21,6 +21,7 @@ import Axios from "../AxiosConfig/Axios";
 
 function InputImage() {
   const [file, setFile] = useState(image);
+  const [existingFile, setExistingFile] = useState('');
   const [loader, setLoader] = useState(false);
   const [songTitle, setSongTitle] = useState('');
   const [instagramId, setInstagramId] = useState('');
@@ -35,25 +36,30 @@ function InputImage() {
     };
   }
   useEffect(() => {
-    checkSong();
+    getSongById();
+    getUserInstaId();
   }, []);
-  const checkSong = async() => {
+  const getSongById = async() => {
     try{
-      await Axios({
+      const {data} = await Axios({
         method:'GET',
-        url:`/song/checkSong/${id}`
-      })
-      getUserInstaId();
+        url:`/song/getSongById/${id}`
+      });
+      const {image,songTitle} = data.song;
+      setExistingFile(image.secure_url)
+      setSongTitle(songTitle)
     }catch(err){
       console.log({err});
-      navigate('/')
     }
   }
   const getUserInstaId = async() =>{
     try{
       setLoader(true);
-      const id = localStorage.getItem('user-id');
-      const {data}  = await axios.get(`http://localhost:4000/user/getUserById/${id}`);
+      const user_id = localStorage.getItem('user-id');
+      const {data} = await Axios({
+        method:'GET',
+        url:`/user/getUserById/${user_id}`
+      })
       const {user} = data;
       setInstagramId(user?.instaId)
       setLoader(false);
@@ -64,7 +70,7 @@ function InputImage() {
     }
   }
   const validate =  () => {
-    if(file === image){
+    if(file === image && existingFile.length === 0){
       alert('please upload image');
       return false;
     }else if(songTitle.length === 0){
@@ -77,13 +83,13 @@ function InputImage() {
   const addSongDetails = async() =>{
     if(validate()){
       try{
+        const myfile = file === image ? '' : file;
         setLoader(true);
-        const artistName = localStorage.getItem('artist-name')
         const {data} = await Axios({
           method:'POST',
           url:`/song/addSongCover/${id}`,
           data:{
-            image:file,
+            image:myfile,
             artistName:'',
             songTitle,
             instaId:instagramId
@@ -112,7 +118,7 @@ function InputImage() {
           <CardSection className="input-image-photo-section">
             <BackgroundImage
               className="input-image-card-photo"
-              src={file}
+              src={file === image && existingFile ? existingFile : file}
               radius="sm"
             ></BackgroundImage>
             <input

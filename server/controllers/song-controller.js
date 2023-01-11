@@ -7,8 +7,9 @@ const User = require("../models/userModel");
 const addSongUrl = async(req,res)=>{
     try{
         const {url,user_id} = req.body;
+        let filterUrl = url.filter((url)=> url.song_url.trim().length > 0);
         const song = await Song.create({
-            socialUrl:url,
+            socialUrl:filterUrl,
             user_id
         });
         res.status(201).send({message:'song created',song})
@@ -21,22 +22,27 @@ const addSongCover = async (req,res) =>{
         const id = req.params.id;
         const {image,artistName,songTitle,instaId} = req.body;
         const user = await User.findById(req.user_id);
-        console.log({req})
-        console.log(req.user_id)
-        const { public_id, secure_url } = await cloudinary.v2.uploader.upload(
-            image,
-            {
-              folder: "musicapp",
-            }
-        );
-        const song = await Song.findByIdAndUpdate(id,{
-            image:{
-                public_id,
-                secure_url
-            },
-            artistName,songTitle,instaId
-        },{new:true});
-        res.status(200).send({message:"song updated",song,username:user.username});
+        if(image.length > 0){
+            const { public_id, secure_url } = await cloudinary.v2.uploader.upload(
+                image,
+                {
+                  folder: "musicapp",
+                }
+            );
+            const song = await Song.findByIdAndUpdate(id,{
+                image:{
+                    public_id,
+                    secure_url
+                },
+                artistName,songTitle,instaId
+            },{new:true});
+            res.status(200).send({message:"song updated",song,username:user.username});
+        }else{
+            const song = await Song.findByIdAndUpdate(id,{
+                artistName,songTitle,instaId
+            },{new:true});
+            res.status(200).send({message:"song updated",song,username:user.username});
+        }
     }catch(err){
         res.status(400).send({message:err})
     }
@@ -53,7 +59,7 @@ const getSongDetails = async (req,res)=>{
                 song = songItem;
             }
         })
-        if(!song){
+        if(song){
             await song.updateOne({clicked:song.clicked+1,clickTime:[...song?.clickTime,new Date()]});
         }
         res.status(200).send({message:'song found',song})       
@@ -92,13 +98,14 @@ const getSongToUpdate = async(req,res)=>{
         const song = await Song.findById(id);
         const services = await Service.find({});
         let newServices = []
-        services.forEach((service)=>{
+        services.map((service)=>{
             let flag = false;
-            song.socialUrl.forEach((url)=>{
+            song.socialUrl.map((url)=>{
                 if(service.secure_url === url.image_url){
                     newServices = [...newServices,{
                       image_url:url.image_url,
-                      song_url:url.song_url
+                      song_url:url.song_url,
+                      name:url.name,
                     }] 
                     flag = true;
                 }
@@ -106,7 +113,8 @@ const getSongToUpdate = async(req,res)=>{
             if(!flag){
                 newServices = [...newServices,{
                     image_url:service.secure_url,
-                    song_url:''
+                    song_url:'',
+                    name:service.name,
                 }]
             }
         })
@@ -120,12 +128,10 @@ const getClicksByMonth = async(req,res) => {
         const {month,id} = req.params;
         const song = await Song.findById(id);
         let monthlyClicks = 0;
-        console.log({song})
         if(song.clickTime.length == 0 ){
             res.status(200).send({monthlyClicks})
         }else{
             song.clickTime.forEach((time,index)=>{
-                console.log({date:time.month() + 1})
                 if(new Date(time).month() +1  == month){
                     monthlyClicks = monthlyClicks + 1;
                 }
@@ -151,6 +157,28 @@ const checkSong = async(req,res) => {
         res.status(400).send({message:err});
     }
 }
+const updateSongUrl = async(req,res) => {
+    try{
+        const id = req.params.id;
+        const {url} = req.body;
+        let filterUrl = url.filter((url)=> url.song_url.trim().length > 0);
+        const song = await Song.findByIdAndUpdate(id,{
+            socialUrl:filterUrl
+        })
+        res.status(201).send({message:'url updated',song});
+    }catch(err){
+        res.status(400).send({message:err});
+    }
+}
+const getSongById = async(req,res) =>{
+    try{
+        const id = req.params.id;
+        const song = await Song.findById(id);
+        res.status(200).send({message:'song found',song});
+    }catch(err){
+        res.status(400).send({message:err});
+    }
+}
 module.exports ={
     addSongUrl,
     addSongCover,
@@ -159,5 +187,7 @@ module.exports ={
     getDetails,
     getSongToUpdate,
     getClicksByMonth,
-    checkSong
+    checkSong,
+    updateSongUrl,
+    getSongById
 }

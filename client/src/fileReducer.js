@@ -9,7 +9,6 @@ let global = {
     }
 }
 const handleFiles = (state = global,action) =>{
-    console.log('you got me...')
     switch(action.type){
         case 'ADD':
             global.files = [...global.files,action.data]

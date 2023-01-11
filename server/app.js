@@ -8,13 +8,14 @@ const cors =  require("cors")
 var userRouter = require('./routes/user-routes');
 const serviceRouter = require('./routes/service-routes')
 const songRouter = require('./routes/song-routes');
+const offerRouter = require('./routes/offer-routes')
 const fileUpload = require("express-fileupload");
+const offer = require('./models/OfferModel');
 require("./models/dbConfig")
 require("./cloudConfig")
 
 
 var app = express();
-
 
 app.set('veiw engine', 'ejs')
 app.set("trust proxy", true);
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/user', userRouter);
 app.use('/service',serviceRouter);
 app.use('/song',songRouter);
+app.use('/offer',offerRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

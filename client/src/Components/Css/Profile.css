@@ -97,18 +97,20 @@
     height: 4vmin;
     display: flex;
     justify-content: space-between;
-    border: 2px solid rgb(56,187,255);
+    border: 2px solid rgb(53, 88, 107);
     align-items:  center;
     border-radius: 1vmin;
 }
 .video{
     width: 47vmin;
     height: 28vmin;
-    border: 2px solid rgb(56,187,255);
     margin-right: 10vmin;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.vedio-border{
+    border: 2px solid rgb(56,187,255);
 }
 .youtube-frame{
     box-shadow: 0 0 1vmin grey;

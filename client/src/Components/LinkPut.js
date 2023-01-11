@@ -3,7 +3,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./Css/Service.css";
 import deleteIcon from './assests/deleteIcon.png'
-import { addUrl } from "../fileIndex";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "./Footer";
 import Axios from "../AxiosConfig/Axios";
@@ -13,12 +12,12 @@ const LinkPut = () => {
   const [filterServices,setFilterServices] = useState([]);
   const [loader,setLoader] = useState(false); 
   const [URLs, setURLs] = useState([]);
-  let normalURLs = [];
+  
   const navigate = useNavigate();
   useEffect(() => {
     isLoggedIn();
   }, []);
-  console.log({normalURLs})
+  
   const isLoggedIn = async () =>{
     try{
         const {data} = await Axios({
@@ -45,9 +44,10 @@ const LinkPut = () => {
       setFilterServices(services)
       let urlArray = [];
       await services.forEach((s,index)=>{
-        urlArray = [...urlArray, {...s,image_url:s.secure_url,song_url:'',service_id:s._id}]
+        urlArray = [...urlArray, {...s,image_url:s.secure_url,song_url:'',service_id:s._id,name:s.name}]
       })
       await setURLs(urlArray);
+      setFilterServices(urlArray)
       setLoader(false);
      } catch (err) {
       console.log({ err });
@@ -55,7 +55,6 @@ const LinkPut = () => {
       setLoader(false)
     }
   };
-  console.log({URLs})
   const deleteService = async (index) =>{
    let arr = service.filter((item,i) => i!==index);
    let urls = URLs.filter((item,i) => i!==index);
@@ -63,13 +62,14 @@ const LinkPut = () => {
    setFilterServices(arr);
    setURLs(urls);
   }
+
   const addSong = async ()=>{
-    let enterUrls = await [...URLs.filter((url) => url.song_url.trim().length > 0)]
+    let enterUrls = await [...filterServices.filter((url) => url?.song_url.length > 0)]
     if(enterUrls.length === 0){
       alert('please enter song url in atleast one sevice')
       return;
     }
-     console.log({enterUrls})
+    
     try{
         const id = localStorage.getItem('user-id');
         setLoader(true)
@@ -81,7 +81,7 @@ const LinkPut = () => {
            user_id:id
           }
         })
-        console.log({data})
+       
         const {song} = data;
         setLoader(false);
         navigate(`/inputImage/${song._id}`);
@@ -91,13 +91,14 @@ const LinkPut = () => {
     }
   }
   const addUrl = (e,index) =>{
-    const image_url = URLs[index].image_url;
+    const image_url = filterServices[index].image_url;
+    const name = filterServices[index].name;
     const song_url = e.target.value;
     let urlArray = URLs;
-    urlArray[index]= {image_url,song_url};
-     setURLs([...urlArray])
+    urlArray[index]= {image_url,song_url,name};
+     setFilterServices([...urlArray])
   }
-  console.log({service})
+ 
   const onFilterServices = (value) => {
      if(value === ''){
       setFilterServices(service);
@@ -143,14 +144,14 @@ const LinkPut = () => {
             >
               <CardSection  className="card-section-image">
               <BackgroundImage className="service-logo"
-                  src={serviceInfo.secure_url}
+                  src={serviceInfo.image_url}
                   radius="sm"
               ></BackgroundImage>
               <Image style={{cursor:'pointer'}} height={30} width={30} src={deleteIcon} onClick={()=> deleteService(index)} color="red.8" variant="light">
                 Delete
               </Image>
               </CardSection>
-              <TextInput withAsterisk required={true} value={URLs[index].url} onChange= {(e)=> addUrl(e,index)} className="service-card-input" placeholder="Enter url here" />
+              <TextInput withAsterisk required={true} value={filterServices[index].url} onChange= {(e)=> addUrl(e,index)} className="service-card-input" placeholder="Enter url here" />
             </Card>
             )
            )

@@ -26,6 +26,7 @@ function Profile() {
   const [latestSong, setLatestSong] = useState('');
   const [embededUrl, setEmbededUrl] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [youtubeLink, setYoutubeLink] = useState('');
   const {username} = useParams();
   const navigate = useNavigate();
   useEffect(() => {
@@ -44,7 +45,6 @@ function Profile() {
       setLoader(false)
     }catch(err){
       setLoader(false)
-      navigate('/');
       console.log({err})
     }
   }
@@ -59,6 +59,8 @@ function Profile() {
         navigate('/onboarding')
       }
       setUser(user);
+      let links = user.profileLinks.filter((link) => link.song_url.includes('youtube'));
+      setYoutubeLink(links.length === 0 ? '' : links[0].song_url)
       setEmbededUrl(user.latestSong.trim() ? true : false);
       setShowEdit(editable)
       let urlArray = [];
@@ -77,7 +79,6 @@ function Profile() {
       setUrl([...urlArray]);
     }catch(err){
       console.log({err})
-      navigate('/');
     }
   }
   function handleChange(file) {
@@ -90,15 +91,19 @@ function Profile() {
   const updateProfile = async() => {
     try{
       const id = localStorage.getItem('user-id')
-       await axios.post(`http://localhost:4000/user/updateProfile`,{
-        image:file,
-        about,
-        profession,
-        instaId,
-        id,
-        latestSong,
-        service:url
-      });
+      await Axios({
+        method:'POST',
+        url:'/user/updateProfile',
+        data:{
+          image:file,
+          about,
+          profession,
+          instaId,
+          id,
+          latestSong,
+          service:url
+        }
+      })
       getUserProfile();
       setOpenModal(false)
     }catch(err){
@@ -133,6 +138,7 @@ function Profile() {
         method:'GET',
         url:'/user/logout'
       })
+      navigate('/');
     }catch(err){
       console.log({err})
     }
@@ -225,29 +231,31 @@ function Profile() {
                 <p className='discription'>{User.about}</p>
               </div>
              </div>
-             {
-              embededUrl && (
                 <div className='pro2'>
                 <div className='applink'>
                   <div className='applinkdiv'>
                     <div></div>
                     <img style={{height:"4vmin"}} src={instagram} alt="" />
-                    <p>Instagram</p>
+                    <p><a href={`${User.instaId}`} className='profile-links' target="_blank">Instagram</a></p>
                     <div></div>
                   </div>
-                  <div className='applinkdiv'>
+                 {
+                  embededUrl && (
+                    <div className='applinkdiv'>
                     <div></div>
                     <img style={{height:"4vmin"}} src={youtube} alt="" />
-                    <p>Youtube</p>
+                    <p><a href={`${youtubeLink}`} className='profile-links' target="_blank" >Youtube</a></p>
                     <div></div>
                   </div>
+                  )
+                 }
                 </div>
-                <div className='video'>
-                      <iframe className='youtube-frame' width="356" height="200" src={`https://www.youtube.com/embed/${User.latestSong.slice(User.latestSong.indexOf("=")+1)}`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <div className={`${embededUrl ? 'vedio-border':''} vedio`}>
+                     {
+                      embededUrl && ( <iframe className='youtube-frame' width="356" height="200" src={`https://www.youtube.com/embed/${User.latestSong.slice(User.latestSong.indexOf("=")+1)}`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>)
+                     }
                 </div>
                </div>
-              )
-             }
         </div>
         <div className='profile-links'>
          <div className='profile-links-option'>

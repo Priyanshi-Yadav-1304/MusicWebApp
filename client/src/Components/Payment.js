@@ -8,6 +8,7 @@ import './Css/Payment.css'
 
 const Payment = () => {
   const [showPage,setShowPage] = useState(false);
+  const [offer, setOffer] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     isLoggedIn();
@@ -18,9 +19,21 @@ const Payment = () => {
         method:'GET',
         url:'/user/isLoggedIn'
       })
+      getOffers();
       setShowPage(true)
     }catch(err){
       navigate('/');
+      console.log({err})
+    }
+  }
+  const getOffers = async(req,res) =>{
+    try{
+      const {data} = await Axios({
+        method:'GET',
+        url:'/offer/getOffer'
+      })
+      setOffer(data.offers[0]);
+    }catch(err){
       console.log({err})
     }
   }
@@ -37,13 +50,17 @@ const Payment = () => {
         <div className='pricingArea'>
           <h1>Pricing</h1>
          <div className='buy'>
-         <h1 className='money'>499</h1>
-         <h1>999/-</h1>
+         <h1 className='money'>{offer?.newPrice}/-</h1>
+         <h1 className='payment-oldprice'>{offer?.oldPrice}/- <span className='oldprice-cross'>X</span></h1>
          </div>
           <ul>
-            <li><h1>Feature1</h1></li>
-            <li><h1>Feature2</h1></li>
-            <li><h1>Feature3</h1></li>
+            {
+              offer && (
+                offer.features.map((feature)=>{
+                  return <li><h1>{feature}</h1></li>
+                })
+              )
+            }
           </ul>
         </div>
         <div className='lastOne'>

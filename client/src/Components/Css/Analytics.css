@@ -61,7 +61,7 @@
     font-weight: 600;
 }
 .countrydiv{
-    /* width: 35vmin; */
+    width: 35vmin;
     font-weight: 600;
     display: flex;
     flex-direction: column;

@@ -100,10 +100,12 @@
 .pm22{
     width: 58vmin;
     height: 30vmin;
-    border: 2px solid rgb(56,187,255);
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.pm22-border{
+    border: 2px solid rgb(56,187,255);
 }
 .pm23{
     width: 58vmin;
@@ -132,6 +134,9 @@
 .pm23 > div > h1{
     margin-left: -3vmin;
     font-size: 5vmin;
+}
+.blank-box{
+    height: 1vmin;
 }
 .AppArea{
     width: 100%;
@@ -294,4 +299,7 @@
 .play-btn:hover{
     border: 1px solid rgb(18,175,255);
     color: rgb(18,175,255);
+}
+.profile-links{
+    text-decoration: none;
 }

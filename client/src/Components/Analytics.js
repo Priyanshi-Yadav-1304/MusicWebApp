@@ -31,8 +31,6 @@ const Analytics = () => {
     }
   }
   const getGraph = (clicks) =>{
-    //   console.log({song_id})
-    // getClicksByMonth(song_id);
     setOpenUser(true);
     setClicks(clicks);
    
@@ -114,7 +112,7 @@ const Analytics = () => {
  
         <div className='countrydiv'>
              <h1>Country</h1>
-             <p><div>India:</div> <div>50</div></p>
+             <p><div>India:</div> <div>{clicks}</div></p>
              {/* <p><div>Pakistan:</div> <div>50</div></p>
              <p><div>Australia:</div> <div>50</div></p>
              <p><div>USA:</div> <div>50</div></p>

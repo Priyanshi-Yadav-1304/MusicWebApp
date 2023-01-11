@@ -1,4 +1,4 @@
-import { BackgroundImage, Button, Card, CardSection, FileInput, Group, Image, LoadingOverlay, Modal, TextInput } from "@mantine/core";
+import { BackgroundImage, Button, Card, CardSection, FileInput, Group, Image, LoadingOverlay, Modal, Select, TextInput } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./Css/Service.css";
@@ -11,6 +11,7 @@ import Axios from "../AxiosConfig/Axios";
 const UpdateSong = () => {
   const [loader,setLoader] = useState(false); 
   const [URLs, setURLs] = useState([]);
+  const [filterServices,setFilterServices] = useState([]);
   const navigate = useNavigate();
   const {id} = useParams();
   useEffect(() => {
@@ -26,23 +27,27 @@ const UpdateSong = () => {
       })
       const {newServices} = data;
       setURLs(newServices);
+      setFilterServices(newServices)
   }catch(err){
     console.log({err})
     navigate('/')
   }
  }
+
   const deleteService = async (index) =>{
-   let urls = URLs.filter((item,i) => i!==index);
-   setURLs(urls);
+   let urls = filterServices.filter((item,i) => i!==index);
+   setFilterServices(urls);
   }
   const addSong = async ()=>{
     try{
-        const id = localStorage.getItem('user-id');
         setLoader(true)
-        const {data} = await axios.post('http://localhost:4000/song/addSong',{
-            url:URLs,
-            user_id:id
-        });
+        const {data} = await Axios({
+          method:'POST',
+          url:`/song/updateSongUrl/${id}`,
+          data:{
+            url:filterServices
+          }
+        })
         const {song} = data;
         setLoader(false);
         navigate(`/inputImage/${song._id}`);
@@ -52,15 +57,31 @@ const UpdateSong = () => {
     }
   }
   const addUrl = (e,index) =>{
-    const image_url = URLs[index].image_url;
+    const image_url = filterServices[index].image_url;
+    const name = filterServices[index].name;
     const song_url = e.target.value;
-    let urlArray = URLs;
-    urlArray[index]= {image_url,song_url};
-    setURLs([...urlArray])
+    let urlArray = filterServices;
+    urlArray[index]= {image_url,song_url,name};
+    setFilterServices([...urlArray])
   }
+  const onFilterServices = (value) => {
+    if(value === ''){
+     setFilterServices(URLs);
+     return;
+    }
+    const filteredServices =  URLs.filter((service) => service.name.toLowerCase().startsWith(value.toLowerCase()));
+    setFilterServices(filteredServices);
+ }
+ 
   return (
     <div className="service-page">
       <Group>
+      <Select
+      placeholder="search services"
+      searchable
+      data={[]}
+      onSearchChange={(value) => onFilterServices(value)}
+    />
         <Button
           onClick={() => addSong()}
           variant="dark"
@@ -74,8 +95,9 @@ const UpdateSong = () => {
         </Button>
       </Group>
       <div className="service">
-        {URLs.length >= 0 ? (
-           URLs.map((serviceInfo,index) =>
+        {filterServices.length >= 0 ? (
+           filterServices.map((serviceInfo,index) =>
+           index < 4 &&
             <Card
             key={index}
             shadow="sm"
@@ -93,7 +115,7 @@ const UpdateSong = () => {
               Delete
             </Image>
             </CardSection>
-            <TextInput value={URLs[index].song_url} onChange= {(e)=> addUrl(e,index)} className="service-card-input" placeholder="Enter url here" />
+            <TextInput value={filterServices[index].song_url} onChange= {(e)=> addUrl(e,index)} className="service-card-input" placeholder="Enter url here" />
           </Card>
            )
         ) : (

@@ -16,6 +16,7 @@ import Axios from '../AxiosConfig/Axios'
 function PlayMusic() {
     const [song, setSong] = useState(null);
     const [showPage,setShowPage] = useState(false)
+    const [youtubeLink, setYoutubeLink] = useState('');
     const navigate = useNavigate();
     useEffect(() => {
        getSongDetails();
@@ -31,6 +32,11 @@ function PlayMusic() {
                 }
             })
             const {song} = data;
+            song.socialUrl.map((link)=>{
+                if(link?.name?.toLowerCase() === 'youtube'){
+                    setYoutubeLink(link.song_url);
+                }
+            })
             if(Object.keys(song).length === 0){
                 navigate('/')
             }
@@ -41,12 +47,19 @@ function PlayMusic() {
            
         }
     }
+    const playYoutubeIframe = () =>{
+        const element = document.getElementById('youtube-iframe');
+        element.src += "&autoplay=1";
+    }
   return (
    <> 
    {
     showPage && (
         <>
-         <div className='SongPage'>
+        {
+            song && (
+                <>
+                 <div className='SongPage'>
         <div className='nav'>
             <div></div>
             <h2>ONE BACKLINK</h2>
@@ -78,17 +91,30 @@ function PlayMusic() {
                         <p>{username}</p>
                         <a href={`${song?.instaId}`} target="_blank"><img style={{height:"3.8vmin"}} src={insta} alt="" /></a>
                     </div>
-                    <div className='pm22'>
-                         <iframe   width="440" height="220" src={`https://www.youtube.com/embed/`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    { youtubeLink.length >0 && (
+                        <div className='pm22 pm22-border'>
+                        <iframe id='youtube-iframe' width="440" height="220" src={`https://www.youtube.com/embed/${youtubeLink.slice(youtubeLink.indexOf('=')+1)}`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                       </div>
+                    )}
+                    {youtubeLink.length === 0 && (
+                     <div className='blank-box'>
                     </div>
+                   )}
                     <div className='pm23'>
                         <div>
                             <img style={{height:"15vmin"}} src={youtubemusic} alt="" />
                             <h1>Music</h1>
                         </div>
-                        <button>Play</button>
+                        <button onClick={playYoutubeIframe}>Play</button>
                     </div>
-
+                    {youtubeLink.length === 0 && (
+                     <>
+                     <div className='blank-box'>
+                    </div>
+                    <div className='blank-box'>
+                    </div>
+                     </>
+                   )}
                 </div>
                 <div className='pvspace'></div>
             </div>
@@ -158,6 +184,9 @@ function PlayMusic() {
         </div>
     </div>
     <Footer />
+                </>
+            )
+        }
         </>
     )
    }
