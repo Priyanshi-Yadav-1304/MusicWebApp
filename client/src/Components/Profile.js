@@ -220,12 +220,13 @@ function Profile() {
               <div className='proname'>
                 <div>
                 <p className='name'>{User.name}</p>
+                <img style={{marginLeft:"2vmin"}} src={correct} alt="" />
                 {
                   showEdit && (
-                    <button style={{border:'none',padding:'1vmin',color:'white',cursor:'pointer',backgroundColor:'#20a8d0',marginTop:'1vmin'}} onClick={()=> openEditForm()}>Edit Profile</button>
+                    <button style={{border:'none',padding:'1vmin',color:'white',cursor:'pointer',backgroundColor:'#20a8d0',marginTop:'1vmin',marginLeft:"2vmin"}} onClick={()=> openEditForm()}>Edit Profile</button>
                   )
                 }
-                <img src={correct} alt="" />
+               
                 </div>
                 <p className='job'>{User.profession}</p>
                 <p className='discription'>{User.about}</p>
@@ -257,12 +258,12 @@ function Profile() {
                 </div>
                </div>
         </div>
-        <div className='profile-links'>
-         <div className='profile-links-option'>
+        <div className=' AppArea'> {/*profile-links*/}
+         <div className='profile-services-area aa1 '>{/*profile-links-option right-service*/}
            {
             User.profileLinks.map((service,index)=>{
                     if(service.song_url.trim()){
-                      return <div key={index} className='playmusic-service-card profile-link-card'>
+                      return <div key={index} className='playmusic-service-card '>{/*profile-link-card */}
                      <BackgroundImage  className='playmusic-service'
                 src={`${service.image_url}`}
                 radius="sm"

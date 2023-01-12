@@ -112,7 +112,7 @@ const Analytics = () => {
  
         <div className='countrydiv'>
              <h1>Country</h1>
-             <p><div>India:</div> <div>{clicks}</div></p>
+             <p><div>India:</div> <div>{month === 'january'? clicks : "0"}</div></p>
              {/* <p><div>Pakistan:</div> <div>50</div></p>
              <p><div>Australia:</div> <div>50</div></p>
              <p><div>USA:</div> <div>50</div></p>

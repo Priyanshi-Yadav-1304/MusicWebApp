@@ -1,6 +1,7 @@
 // import './App.css';
 // import { Footer } from "@mantine/core";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Analytics from "./Components/Analytics";
 import Forbidden from "./Components/Forbidden";
 
@@ -15,7 +16,6 @@ import Services from "./Components/Services";
 import Signin from "./Components/Signin";
 import Signup from "./Components/Signup";
 import UpdateSong from "./Components/UpdateSong";
-// import UploadService from "./Components/UploadService";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
       <Router>
         <Routes>
           {/* <Route path="/" element={<Home/>}></Route> */}
-          <Route path="/linkPut" element={<LinkPut/>}></Route>
+          <Route path="/link" element={<LinkPut/>}></Route>
           <Route path="/updateSong/:id" element={<UpdateSong/>}></Route>
           <Route path="/inputImage/:id" element={<InputImage/>}></Route>
           <Route path="/:username/:songTitle" element={<PlayMusic/>}></Route>
@@ -32,7 +32,7 @@ function App() {
           <Route path="/onboarding" element={<Onboarding/>}></Route>
           <Route path="/:username" element={<Profile />}></Route>
           <Route path="/payment" element={<Payment />}></Route>
-          <Route path="/services" element={<Services />}></Route>
+          <Route path="/admin" element={<Services />}></Route>
           <Route path="/analytics" element={<Analytics />}></Route>
           <Route path="/forbidden" element={<Forbidden />}></Route>
           
