@@ -37,6 +37,7 @@ function Signup() {
       if (success) {
         localStorage.setItem("user-id", user._id);
         localStorage.setItem("artist-name", user.artistName);
+        localStorage.setItem("username",user.username);
         navigate("/payment");
       }
     } catch (err) {

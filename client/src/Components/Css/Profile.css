@@ -45,7 +45,8 @@
     height: 7vmin;
     width: 54vmin;
     display: flex;
-    justify-content: space-between;
+
+    /* justify-content: space-between; */
 }
 .name{
     font-size: 6.5vmin;
@@ -102,14 +103,19 @@
     border-radius: 1vmin;
 }
 .video{
-    width: 47vmin;
-    height: 28vmin;
+    /* width: 50vmin;
+    height: 30vmin; */
     margin-right: 10vmin;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .vedio-border{
+    width: 50vmin;
+    height: 30vmin;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 2px solid rgb(56,187,255);
 }
 .youtube-frame{
@@ -153,4 +159,16 @@
     cursor: pointer;
     color: white;
     text-decoration: none;
+}
+.profile-play-btn{
+    width: 17vmin;
+    height: 5vmin;
+    border-radius: 4vmin;
+    border: 1px solid black;
+    cursor: pointer;
+    font-size: 2.1vmin;
+}
+.profile-play-btn:hover{
+    border: 1px solid rgb(18,175,255);
+    color: rgb(18,175,255);
 }
