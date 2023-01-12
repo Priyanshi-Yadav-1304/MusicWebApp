@@ -25,7 +25,7 @@ function Signin() {
       localStorage.setItem('username',user.username)
       navigate(`/${user.username}`)
     }catch(err){
-      const {message} = err.response.data;
+      const {message} = err.response?.data;
       console.log({err})
       alert(message)
     }
